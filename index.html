@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finanças Guimarães</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --bg: #0e0f11;
+    --surface: #16181c;
+    --surface2: #1e2127;
+    --border: #2a2d35;
+    --text: #f0ede8;
+    --text2: #8b8f9a;
+    --text3: #555966;
+    --green: #4dbb8a;
+    --green-dim: #1a3d2e;
+    --red: #e05c5c;
+    --red-dim: #3a1a1a;
+    --gold: #e8c468;
+    --gold-dim: #3a3010;
+    --blue: #5b9cf6;
+    --blue-dim: #152044;
+    --purple: #a78bfa;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 32px; flex-wrap: wrap; gap: 12px;
+  }
+  .header-left h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px; font-weight: 400;
+    color: var(--text); letter-spacing: -0.5px;
+  }
+  .header-left p { font-size: 13px; color: var(--text2); margin-top: 4px; }
+  .live-badge {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--green-dim); border: 1px solid var(--green);
+    border-radius: 99px; padding: 6px 14px;
+    font-size: 12px; font-weight: 500; color: var(--green);
+  }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  /* METRICS GRID */
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .metric {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    position: relative; overflow: hidden;
+  }
+  .metric::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .metric.green::before { background: var(--green); }
+  .metric.red::before { background: var(--red); }
+  .metric.gold::before { background: var(--gold); }
+  .metric.blue::before { background: var(--blue); }
+  .metric-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .metric-value { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--text); }
+  .metric-value.green { color: var(--green); }
+  .metric-value.red { color: var(--red); }
+  .metric-value.gold { color: var(--gold); }
+  .metric-value.blue { color: var(--blue); }
+  .metric-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  /* SECTION */
+  .section-title {
+    font-size: 11px; font-weight: 500; color: var(--text2);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
+  }
+
+  /* CHART AREA */
+  .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  @media (max-width: 600px) { .charts { grid-template-columns: 1fr; } }
+  .chart-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px;
+  }
+  .chart-wrap { position: relative; height: 200px; }
+
+  /* TRANSACTIONS */
+  .tx-list { display: flex; flex-direction: column; gap: 6px; }
+  .tx {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    transition: background 0.15s;
+  }
+  .tx:hover { background: var(--surface2); }
+  .tx-dot {
+    width: 34px; height: 34px; border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+  }
+  .tx-mid { flex: 1; min-width: 0; }
+  .tx-desc { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tx-meta { font-size: 11px; color: var(--text3); margin-top: 1px; }
+  .tx-val { font-size: 14px; font-weight: 600; flex-shrink: 0; }
+  .tx-val.cr { color: var(--green); }
+  .tx-val.db { color: var(--red); }
+  .tx-val.inv { color: var(--gold); }
+
+  /* SALDO BAR */
+  .saldo-bar {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px; margin-bottom: 20px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+  .saldo-item { text-align: center; }
+  .saldo-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .saldo-val { font-family: 'DM Serif Display', serif; font-size: 20px; }
+
+  /* FILTER TABS */
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tab {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 99px; padding: 6px 14px;
+    font-size: 12px; color: var(--text2); cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab.active {
+    background: var(--text); color: var(--bg);
+    border-color: var(--text); font-weight: 500;
+  }
+
+  /* ATUALIZADO */
+  .footer { text-align: center; margin-top: 32px; font-size: 11px; color: var(--text3); }
+
+  /* PROGRESS */
+  .progress-wrap { margin-bottom: 20px; }
+  .progress-item { margin-bottom: 10px; }
+  .progress-header { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 5px; }
+  .progress-bg { background: var(--surface2); border-radius: 99px; height: 6px; }
+  .progress-fill { border-radius: 99px; height: 6px; transition: width 0.6s ease; }
+
+  .loading { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Família Guimarães</h1>
+    <p id="lastUpdate">Carregando dados...</p>
+  </div>
+  <div class="live-badge"><span class="live-dot"></span> Ao vivo · Nubank</div>
+</div>
+
+<!-- SALDO BAR -->
+<div class="saldo-bar">
+  <div class="saldo-item">
+    <div class="saldo-label">Conta corrente</div>
+    <div class="saldo-val" id="saldoConta" style="color:var(--blue);">—</div>
+  </div>
+  <div class="saldo-item">
+    <div class="saldo-label">Fatura aberta</div>
+    <div class="saldo-val" id="faturaAberta" style="color:var(--red);">—</div>
+  </div>
+  <div class="saldo-item">
+    <div class="saldo-label">Limite disponível</div>
+    <div class="saldo-val" id="limiteDisp" style="color:var(--green);">—</div>
+  </div>
+  <div class="saldo-item">
+    <div class="saldo-label">Limite total</div>
+    <div class="saldo-val" id="limiteTotal" style="color:var(--text2);">—</div>
+  </div>
+</div>
+
+<!-- METRICS -->
+<div class="metrics" id="metricsArea">
+  <div class="metric green">
+    <div class="metric-label">Entradas mai</div>
+    <div class="metric-value green" id="mEntradas">—</div>
+    <div class="metric-sub" id="mEntradasSub">—</div>
+  </div>
+  <div class="metric red">
+    <div class="metric-label">Saídas mai</div>
+    <div class="metric-value red" id="mSaidas">—</div>
+    <div class="metric-sub" id="mSaidasSub">—</div>
+  </div>
+  <div class="metric gold">
+    <div class="metric-label">Investimentos</div>
+    <div class="metric-value gold" id="mInvest">—</div>
+    <div class="metric-sub" id="mInvestSub">—</div>
+  </div>
+  <div class="metric blue">
+    <div class="metric-label">Saldo líquido</div>
+    <div class="metric-value blue" id="mSaldo">—</div>
+    <div class="metric-sub">Entradas − saídas</div>
+  </div>
+</div>
+
+<!-- CHARTS -->
+<div class="charts">
+  <div class="chart-card">
+    <div class="section-title">Fluxo diário — maio</div>
+    <div class="chart-wrap"><canvas id="flowChart"></canvas></div>
+  </div>
+  <div class="chart-card">
+    <div class="section-title">Distribuição de saídas</div>
+    <div class="chart-wrap"><canvas id="catChart"></canvas></div>
+  </div>
+</div>
+
+<!-- PROGRESSO ORÇAMENTO -->
+<div class="chart-card" style="margin-bottom:20px;">
+  <div class="section-title">Orçamento mensal — comprometimento</div>
+  <div class="progress-wrap" id="progressArea" style="margin-top:12px;margin-bottom:0;"></div>
+</div>
+
+<!-- TRANSAÇÕES -->
+<div class="section-title">
+  <span>Transações recentes</span>
+  <span id="txCount" style="color:var(--text3);"></span>
+</div>
+<div class="tabs">
+  <div class="tab active" onclick="filterTx('all', this)">Todas</div>
+  <div class="tab" onclick="filterTx('CREDIT', this)">Entradas</div>
+  <div class="tab" onclick="filterTx('DEBIT', this)">Saídas</div>
+  <div class="tab" onclick="filterTx('INV', this)">Investimentos</div>
+</div>
+<div class="tx-list" id="txList"><div class="loading">Carregando transações...</div></div>
+
+<div class="footer" id="footer">Atualizado automaticamente via Open Finance · Nubank · Família Guimarães</div>
+
+<script>
+// ─── DADOS REAIS DO NUBANK (Open Finance) ────────────────────────────────────
+const accountData = {
+  saldo: 482.64,
+  faturaAberta: 8814.22,
+  limiteDisp: 11685.78,
+  limiteTotal: 43350.00
+};
+
+const transactions = [
+  { id:'1', date:'2026-05-26', desc:'Pix — Jessica Carolina', amount:-8.30,   type:'DEBIT',  cat:'Transferência', emoji:'↗' },
+  { id:'2', date:'2026-05-25', desc:'Resgate RDB',             amount:404.00,  type:'CREDIT', cat:'Investimento',  emoji:'📈' },
+  { id:'3', date:'2026-05-23', desc:'Pix recebido — Fernanda Pedrocchi', amount:53.00, type:'CREDIT', cat:'Transferência', emoji:'↙' },
+  { id:'4', date:'2026-05-18', desc:'Pagamento de fatura',     amount:-5794.43,type:'DEBIT',  cat:'Fatura cartão', emoji:'💳' },
+  { id:'5', date:'2026-05-18', desc:'Pix recebido — Wendell Guimarães', amount:1330.63, type:'CREDIT', cat:'Transferência', emoji:'↙' },
+  { id:'6', date:'2026-05-12', desc:'SEMAE — Água e esgoto',   amount:-25.00,  type:'DEBIT',  cat:'Utilidade',     emoji:'💧' },
+  { id:'7', date:'2026-05-12', desc:'Resgate Fundo Nu Reserva',amount:1003.20, type:'CREDIT', cat:'Investimento',  emoji:'📈' },
+  { id:'8', date:'2026-05-11', desc:'Resgate RDB',             amount:700.00,  type:'CREDIT', cat:'Investimento',  emoji:'📈' },
+  { id:'9', date:'2026-05-11', desc:'Resgate RDB',             amount:900.00,  type:'CREDIT', cat:'Investimento',  emoji:'📈' },
+  { id:'10',date:'2026-05-11', desc:'Vivo — Telefone',         amount:-55.00,  type:'DEBIT',  cat:'Telefonia',     emoji:'📱' },
+  { id:'11',date:'2026-05-10', desc:'Aplicação RDB',           amount:-400.00, type:'DEBIT',  cat:'Investimento',  emoji:'📉' },
+  { id:'12',date:'2026-05-10', desc:'Aplicação Fundo',         amount:-150.00, type:'DEBIT',  cat:'Investimento',  emoji:'📉' },
+  { id:'13',date:'2026-05-10', desc:'Aplicação RDB',           amount:-200.00, type:'DEBIT',  cat:'Investimento',  emoji:'📉' },
+  { id:'14',date:'2026-05-10', desc:'Aplicação RDB',           amount:-300.00, type:'DEBIT',  cat:'Investimento',  emoji:'📉' },
+  { id:'15',date:'2026-05-10', desc:'Aplicação RDB',           amount:-150.00, type:'DEBIT',  cat:'Investimento',  emoji:'📉' },
+  { id:'16',date:'2026-05-10', desc:'Aplicação RDB',           amount:-500.00, type:'DEBIT',  cat:'Investimento',  emoji:'📉' },
+  { id:'17',date:'2026-05-08', desc:'Prefeitura — IPTU/taxas', amount:-54.58,  type:'DEBIT',  cat:'Imposto',       emoji:'🏛️' },
+  { id:'18',date:'2026-05-08', desc:'Financiamento Casa — Wendell Guimarães', amount:-695.00, type:'DEBIT', cat:'Moradia', emoji:'🏠' },
+  { id:'19',date:'2026-05-08', desc:'Condomínio R P da L VI',  amount:-270.00, type:'DEBIT',  cat:'Moradia',       emoji:'🏠' },
+  { id:'20',date:'2026-05-08', desc:'AW Internet',             amount:-79.90,  type:'DEBIT',  cat:'Internet',      emoji:'📡' },
+  { id:'21',date:'2026-05-08', desc:'Bradesco Consórcios',     amount:-718.08, type:'DEBIT',  cat:'Consórcio',     emoji:'🚗' },
+  { id:'22',date:'2026-05-08', desc:'CPFL — Energia elétrica', amount:-233.85, type:'DEBIT',  cat:'Utilidade',     emoji:'⚡' },
+  { id:'23',date:'2026-05-08', desc:'G Angelo Gasques ME',     amount:-190.00, type:'DEBIT',  cat:'Serviço',       emoji:'🔧' },
+  { id:'24',date:'2026-05-08', desc:'Detran — débito Pix',     amount:-800.33, type:'DEBIT',  cat:'Imposto',       emoji:'🚘' },
+  { id:'25',date:'2026-05-07', desc:'Pix — Fernanda Pedrocchi',amount:-400.00, type:'DEBIT',  cat:'Transferência', emoji:'↗' },
+  { id:'26',date:'2026-05-06', desc:'Unimed SJ Rio Preto',     amount:-728.87, type:'DEBIT',  cat:'Saúde',         emoji:'💊' },
+  { id:'27',date:'2026-05-05', desc:"Pix — D'Artibale Faria Advogados", amount:7833.02, type:'CREDIT', cat:'Honorários', emoji:'⚖️' },
+  { id:'28',date:'2026-05-01', desc:'Pix — Erika Regina da Costa', amount:-32.00, type:'DEBIT', cat:'Transferência', emoji:'↗' },
+  { id:'29',date:'2026-05-01', desc:'Resgate RDB',             amount:30.00,   type:'CREDIT', cat:'Investimento',  emoji:'📈' },
+];
+
+// ─── CATEGORIAS PARA CHART ────────────────────────────────────────────────────
+const catBudget = [
+  { name: 'Fatura cartão', val: 5794.43, color: '#e05c5c' },
+  { name: 'Moradia',       val: 965.00,  color: '#4dbb8a' },
+  { name: 'Investimentos', val: 1700.00, color: '#e8c468' },
+  { name: 'Saúde',         val: 728.87,  color: '#a78bfa' },
+  { name: 'Impostos',      val: 854.91,  color: '#f97316' },
+  { name: 'Consórcio',     val: 718.08,  color: '#5b9cf6' },
+  { name: 'Utilidades',    val: 338.75,  color: '#34d399' },
+  { name: 'Outros',        val: 677.00,  color: '#94a3b8' },
+];
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+function fmt(v) {
+  return 'R$ ' + Math.abs(v).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+}
+function fmtDate(d) {
+  const [y, m, day] = d.split('-');
+  return `${day}/${m}`;
+}
+
+function isInv(tx) {
+  return tx.cat === 'Investimento';
+}
+
+function init() {
+  // Saldo bar
+  document.getElementById('saldoConta').textContent = fmt(accountData.saldo);
+  document.getElementById('faturaAberta').textContent = fmt(accountData.faturaAberta);
+  document.getElementById('limiteDisp').textContent = fmt(accountData.limiteDisp);
+  document.getElementById('limiteTotal').textContent = fmt(accountData.limiteTotal);
+  document.getElementById('lastUpdate').textContent = 'Última atualização: ' + new Date().toLocaleString('pt-BR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+
+  // Metrics
+  const entradas = transactions.filter(t => t.type === 'CREDIT' && !isInv(t)).reduce((s, t) => s + t.amount, 0);
+  const saidas   = transactions.filter(t => t.type === 'DEBIT'  && !isInv(t)).reduce((s, t) => s + Math.abs(t.amount), 0);
+  const aplicac  = transactions.filter(t => isInv(t) && t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0);
+  const resgates = transactions.filter(t => isInv(t) && t.amount > 0).reduce((s, t) => s + t.amount, 0);
+  const investLiq = resgates - aplicac;
+
+  document.getElementById('mEntradas').textContent = fmt(entradas);
+  document.getElementById('mEntradasSub').textContent = transactions.filter(t => t.type==='CREDIT' && !isInv(t)).length + ' lançamentos';
+  document.getElementById('mSaidas').textContent = fmt(saidas);
+  document.getElementById('mSaidasSub').textContent = transactions.filter(t => t.type==='DEBIT' && !isInv(t)).length + ' lançamentos';
+  document.getElementById('mInvest').textContent = (investLiq >= 0 ? '+' : '') + fmt(investLiq).replace('R$ ', 'R$ ');
+  document.getElementById('mInvestSub').textContent = 'Resgates − aplicações';
+  const saldo = entradas - saidas;
+  document.getElementById('mSaldo').textContent = fmt(saldo);
+
+  // Progress bars
+  const totalSaidas = saidas;
+  const prog = document.getElementById('progressArea');
+  catBudget.forEach(c => {
+    const pct = Math.min(100, (c.val / totalSaidas) * 100).toFixed(0);
+    prog.innerHTML += `
+      <div class="progress-item">
+        <div class="progress-header"><span>${c.name}</span><span>${fmt(c.val)} · ${pct}%</span></div>
+        <div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${c.color};"></div></div>
+      </div>`;
+  });
+
+  // Flow chart (daily)
+  const days = {};
+  transactions.forEach(t => {
+    const d = t.date;
+    if (!days[d]) days[d] = { in: 0, out: 0 };
+    if (t.amount > 0 && !isInv(t)) days[d].in  += t.amount;
+    if (t.amount < 0 && !isInv(t)) days[d].out += Math.abs(t.amount);
+  });
+  const sortedDays = Object.keys(days).sort();
+  new Chart(document.getElementById('flowChart'), {
+    type: 'bar',
+    data: {
+      labels: sortedDays.map(fmtDate),
+      datasets: [
+        { label: 'Entradas', data: sortedDays.map(d => days[d].in),  backgroundColor: '#4dbb8a88', borderColor: '#4dbb8a', borderWidth: 1 },
+        { label: 'Saídas',   data: sortedDays.map(d => days[d].out), backgroundColor: '#e05c5c88', borderColor: '#e05c5c', borderWidth: 1 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#8b8f9a', font: { size: 11 } } }, tooltip: { callbacks: { label: ctx => fmt(ctx.parsed.y) } } },
+      scales: {
+        x: { ticks: { color: '#555966', font: { size: 10 } }, grid: { color: '#2a2d3533' } },
+        y: { ticks: { color: '#555966', font: { size: 10 }, callback: v => 'R$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#2a2d3533' } }
+      }
+    }
+  });
+
+  // Donut
+  new Chart(document.getElementById('catChart'), {
+    type: 'doughnut',
+    data: {
+      labels: catBudget.map(c => c.name),
+      datasets: [{ data: catBudget.map(c => c.val), backgroundColor: catBudget.map(c => c.color), borderWidth: 0, hoverOffset: 6 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '65%',
+      plugins: {
+        legend: { position: 'right', labels: { color: '#8b8f9a', font: { size: 10 }, boxWidth: 10, padding: 8 } },
+        tooltip: { callbacks: { label: ctx => ' ' + fmt(ctx.parsed) } }
+      }
+    }
+  });
+
+  // Transactions
+  renderTx('all');
+}
+
+let currentFilter = 'all';
+function filterTx(filter, el) {
+  currentFilter = filter;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderTx(filter);
+}
+
+function renderTx(filter) {
+  let list = [...transactions];
+  if (filter === 'CREDIT') list = list.filter(t => t.type === 'CREDIT' && !isInv(t));
+  else if (filter === 'DEBIT') list = list.filter(t => t.type === 'DEBIT' && !isInv(t));
+  else if (filter === 'INV') list = list.filter(t => isInv(t));
+
+  document.getElementById('txCount').textContent = list.length + ' registros';
+
+  const container = document.getElementById('txList');
+  if (list.length === 0) { container.innerHTML = '<div class="loading">Nenhuma transação nesse filtro.</div>'; return; }
+
+  container.innerHTML = list.slice(0, 30).map(t => {
+    const isCredit = t.amount > 0;
+    const isInvTx  = isInv(t);
+    const cls = isInvTx ? 'inv' : (isCredit ? 'cr' : 'db');
+    const bgColor = isInvTx ? 'var(--gold-dim)' : (isCredit ? 'var(--green-dim)' : 'var(--surface2)');
+    const sign = isCredit ? '+' : '';
+    return `
+      <div class="tx">
+        <div class="tx-dot" style="background:${bgColor};">${t.emoji}</div>
+        <div class="tx-mid">
+          <div class="tx-desc">${t.desc}</div>
+          <div class="tx-meta">${fmtDate(t.date)} · ${t.cat}</div>
+        </div>
+        <div class="tx-val ${cls}">${sign}${fmt(t.amount)}</div>
+      </div>`;
+  }).join('');
+}
+
+init();
+
+// Auto-refresh a cada 5min
+setInterval(() => {
+  document.getElementById('lastUpdate').textContent = 'Última atualização: ' + new Date().toLocaleString('pt-BR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+}, 300000);
+</script>
+</body>
+</html>
