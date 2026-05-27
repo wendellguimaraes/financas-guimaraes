@@ -398,10 +398,6 @@ function init() {
     document.getElementById('dTopCatSub').textContent = fmt(topCat[1]) + ' · ' + pctTop + '% das despesas';
   }
 
-  document.getElementById('mEntradas').textContent = fmt(entradas);
-  document.getElementById('mEntradasSub').textContent = transactions.filter(t => t.type==='CREDIT' && !isInv(t)).length + ' lançamentos';
-  document.getElementById('mSaidas').textContent = fmt(saidas);
-  document.getElementById('mSaidasSub').textContent = transactions.filter(t => t.type==='DEBIT' && !isInv(t)).length + ' lançamentos';
   document.getElementById('mInvest').textContent = (investLiq >= 0 ? '+' : '') + fmt(investLiq).replace('R$ ', 'R$ ');
   document.getElementById('mInvestSub').textContent = 'Resgates − aplicações';
   const saldo = entradas - saidas;
