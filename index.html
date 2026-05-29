@@ -162,6 +162,24 @@
   .progress-fill { border-radius: 99px; height: 6px; transition: width 0.6s ease; }
 
   .loading { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 14px; }
+  /* DESPESAS VARIÁVEIS */
+  .var-metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; position: relative; overflow: hidden; }
+  .var-metric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--purple); }
+  .var-metric-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .var-metric-value { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--purple); }
+  .var-metric-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+  .var-cat-header { display: flex; align-items: center; justify-content: space-between; background: var(--surface2); border-radius: var(--radius-sm); padding: 10px 14px; cursor: pointer; user-select: none; margin-bottom: 4px; }
+  .var-cat-title { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 500; color: var(--text); }
+  .var-cat-total { font-size: 13px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .var-cat-body { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; margin-bottom: 6px; }
+  .var-tx { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-bottom: 0.5px solid var(--border); font-size: 13px; }
+  .var-tx:last-child { border-bottom: none; }
+  .var-tx-date { color: var(--text3); font-size: 11px; min-width: 44px; }
+  .var-tx-desc { flex: 1; color: var(--text); }
+  .var-tx-val { font-weight: 600; color: var(--red); min-width: 80px; text-align: right; }
+  .var-badge-pend { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 99px; background: #fef3c7; color: #92400e; font-weight: 500; margin-left: 4px; }
+  .var-alerta { background: #fef3c7; border-left: 3px solid #f59e0b; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 10px 14px; font-size: 13px; color: #92400e; margin-top: 12px; }
+
   /* RECEITAS */
   .receitas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
   .receita-metric {
@@ -297,6 +315,7 @@
   <button class="nav-tab active" onclick="switchPage('visao-geral', this)">📊 Visão Geral</button>
   <button class="nav-tab" onclick="switchPage('receitas', this)">💰 Receitas Fixas</button>
   <button class="nav-tab" onclick="switchPage('despesas-fixas', this)">📌 Despesas Fixas</button>
+  <button class="nav-tab" onclick="switchPage('variaveis', this)">🔀 Despesas Variáveis</button>
   <button class="nav-tab" onclick="switchPage('comparativo', this)">📅 Comparativo</button>
 </div>
 
@@ -703,6 +722,63 @@
   </div>
   <div id="compArea"></div>
 </div><!-- fim page comparativo -->
+<div id="page-variaveis" class="page">
+
+  <!-- MÉTRICAS -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px;">
+    <div class="var-metric">
+      <div class="var-metric-label">Fatura aberta (jun)</div>
+      <div class="var-metric-value">R$ 9.224,15</div>
+      <div class="var-metric-sub">Vence 18/06/2026</div>
+    </div>
+    <div class="var-metric">
+      <div class="var-metric-label">Lançamentos novos</div>
+      <div class="var-metric-value">R$ 1.214,95</div>
+      <div class="var-metric-sub">17 compras desde 19/05</div>
+    </div>
+    <div class="var-metric">
+      <div class="var-metric-label">Maior gasto variável</div>
+      <div class="var-metric-value">R$ 479,46</div>
+      <div class="var-metric-sub">Farmácia — Drogaria Santa Terez</div>
+    </div>
+    <div class="var-metric">
+      <div class="var-metric-label">Dias para fechar</div>
+      <div class="var-metric-value" id="diasFecha">—</div>
+      <div class="var-metric-sub">Até 18/06/2026</div>
+    </div>
+  </div>
+
+  <!-- GRÁFICO -->
+  <div class="charts" style="margin-bottom:20px;">
+    <div class="chart-card">
+      <div class="section-title">Distribuição por categoria</div>
+      <div style="position:relative;height:220px;"><canvas id="varDonut"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="section-title">Evolução dos gastos variáveis (mai → jun)</div>
+      <div style="position:relative;height:220px;"><canvas id="varFlow"></canvas></div>
+    </div>
+  </div>
+
+  <!-- LISTA POR CATEGORIA -->
+  <div class="section-title" style="margin-bottom:12px;">
+    <span>Lançamentos por categoria — fatura aberta jun/2026</span>
+    <span style="color:var(--text3);">17 registros</span>
+  </div>
+
+  <div id="varCats"></div>
+
+  <div class="var-alerta">
+    ⚠️ <strong>Atenção:</strong> Faltam ~20 dias para o ciclo fechar em 18/06. Com o ritmo atual de R$ 121/dia, a fatura pode chegar a <strong>R$ 11.600+</strong> ao fechar. Considere reduzir gastos variáveis nas próximas semanas.
+  </div>
+
+  <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+    <button onclick="sendPrompt('Quais parcelamentos chegam na fatura de junho?')">Parcelamentos em junho ↗</button>
+    <button onclick="sendPrompt('Faça uma projeção da fatura de junho com base no ritmo atual')">Projeção fatura junho ↗</button>
+  </div>
+
+</div><!-- fim page variaveis -->
+
 
 <div class="footer" id="footer">Atualizado automaticamente via Open Finance · Nubank · Família Guimarães</div>
 
@@ -873,6 +949,156 @@ function initReceitaCharts() {
 const origSwitch = window.switchPage;
 
 // ─── NAVEGAÇÃO ───────────────────────────────────────────────────────────────
+
+// ─── DESPESAS VARIÁVEIS ──────────────────────────────────────────────────────
+function initVariaveisPage() {
+  // Dias para fechar
+  const hoje = new Date();
+  const venc = new Date('2026-06-18');
+  const dias = Math.ceil((venc - hoje) / (1000*60*60*24));
+  const el = document.getElementById('diasFecha');
+  if (el) el.textContent = dias + ' dias';
+
+  const txs = [
+    { date:'28/05', desc:'NuTag (pedágio)', val:8.64,   cat:'Transporte',  emoji:'🚗' },
+    { date:'28/05', desc:'NuTag (pedágio)', val:8.64,   cat:'Transporte',  emoji:'🚗' },
+    { date:'28/05', desc:'NuTag (pedágio)', val:11.02,  cat:'Transporte',  emoji:'🚗' },
+    { date:'27/05', desc:'Drogaria Santa Terez', val:47.98, cat:'Farmácia', emoji:'💊' },
+    { date:'27/05', desc:'Juscelino Sjrp', val:27.10,   cat:'Mercado',     emoji:'🛒' },
+    { date:'26/05', desc:'Lanchonete Calcadão', val:17.00, cat:'Restaurante', emoji:'🍽️' },
+    { date:'24/05', desc:'Petrobras Premmia', val:116.30, cat:'Combustível', emoji:'⛽' },
+    { date:'22/05', desc:'Farmácia Economize', val:19.95, cat:'Farmácia',  emoji:'💊' },
+    { date:'22/05', desc:'Farmácia Economize', val:41.98, cat:'Farmácia',  emoji:'💊' },
+    { date:'22/05', desc:'Café Conchego', val:28.00,    cat:'Restaurante', emoji:'🍽️' },
+    { date:'22/05', desc:'Frutalle', val:18.42,          cat:'Restaurante', emoji:'🍽️' },
+    { date:'22/05', desc:'Ec *Petrobrasprem', val:137.75, cat:'Combustível', emoji:'⛽' },
+    { date:'22/05', desc:'Gaviolli Eletricidade 1/4', val:222.72, cat:'Veículo', emoji:'🔧' },
+    { date:'21/05', desc:'Drogaria Santa Terez', val:431.48, cat:'Farmácia', emoji:'💊' },
+    { date:'20/05', desc:'Ternero Atelie de Cost', val:50.00, cat:'Vestuário', emoji:'👗' },
+    { date:'20/05', desc:'Autopostoplazario', val:9.97,   cat:'Combustível', emoji:'⛽' },
+    { date:'20/05', desc:'Lanchonete Calcadão', val:17.00, cat:'Restaurante', emoji:'🍽️' },
+  ];
+
+  const catColors = {
+    'Farmácia':    { bg:'#FAECE7', cor:'#E24B4A' },
+    'Combustível': { bg:'#FAEEDA', cor:'#EF9F27' },
+    'Restaurante': { bg:'#E1F5EE', cor:'#1D9E75' },
+    'Mercado':     { bg:'#EAF3DE', cor:'#639922' },
+    'Transporte':  { bg:'#E6F1FB', cor:'#378ADD' },
+    'Veículo':     { bg:'#EEEDFE', cor:'#7F77DD' },
+    'Vestuário':   { bg:'#FBEAF0', cor:'#E47BAE' },
+  };
+
+  // Agrupar por categoria
+  const groups = {};
+  txs.forEach(t => {
+    if (!groups[t.cat]) groups[t.cat] = [];
+    groups[t.cat].push(t);
+  });
+  const sorted = Object.entries(groups).sort((a,b) =>
+    b[1].reduce((s,t)=>s+t.val,0) - a[1].reduce((s,t)=>s+t.val,0)
+  );
+
+  // Renderizar lista
+  const container = document.getElementById('varCats');
+  if (container && !container.dataset.init) {
+    container.dataset.init = '1';
+    sorted.forEach(([cat, items], i) => {
+      const total = items.reduce((s,t)=>s+t.val,0);
+      const id = 'vcat_' + i;
+      const c = catColors[cat] || { bg:'#F1EFE8', cor:'#888' };
+
+      const sec = document.createElement('div');
+
+      const hdr = document.createElement('div');
+      hdr.className = 'var-cat-header';
+      hdr.innerHTML = `
+        <div class="var-cat-title">
+          <span style="background:${c.bg};width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;">${items[0].emoji}</span>
+          ${cat}
+          <span style="font-size:11px;font-weight:400;color:var(--text3);">${items.length} lançamento${items.length>1?'s':''}</span>
+        </div>
+        <div class="var-cat-total">
+          R$ ${total.toFixed(2).replace('.',',')}
+          <span id="ico_${id}" style="font-size:11px;color:var(--text3);transition:transform 0.2s;">▼</span>
+        </div>`;
+
+      const body = document.createElement('div');
+      body.className = 'var-cat-body';
+      body.id = id;
+      body.style.background = 'var(--surface)';
+      body.style.border = '1px solid var(--border)';
+      body.style.borderRadius = '8px';
+      body.innerHTML = items.map(t => `
+        <div class="var-tx">
+          <span class="var-tx-date">${t.date}</span>
+          <span class="var-tx-desc">${t.desc} <span class="var-badge-pend">pendente</span></span>
+          <span class="var-tx-val">R$ ${t.val.toFixed(2).replace('.',',')}</span>
+        </div>`).join('');
+
+      hdr.addEventListener('click', () => {
+        const open = body.style.maxHeight && body.style.maxHeight !== '0px';
+        body.style.maxHeight = open ? '0' : body.scrollHeight + 'px';
+        document.getElementById('ico_' + id).style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+      });
+
+      sec.appendChild(hdr);
+      sec.appendChild(body);
+      container.appendChild(sec);
+    });
+  }
+
+  // Donut
+  if (!window._varDonutInit) {
+    window._varDonutInit = true;
+    const catTotals = sorted.map(([cat, items]) => ({
+      cat, total: items.reduce((s,t)=>s+t.val,0),
+      cor: (catColors[cat]||{cor:'#888'}).cor
+    }));
+    new Chart(document.getElementById('varDonut'), {
+      type: 'doughnut',
+      data: {
+        labels: catTotals.map(c => c.cat),
+        datasets: [{ data: catTotals.map(c => c.total), backgroundColor: catTotals.map(c => c.cor), borderWidth: 0, hoverOffset: 6 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: '60%',
+        layout: { padding: 4 },
+        plugins: {
+          legend: { position: 'bottom', labels: { color: '#6b7280', font: { size: 10 }, boxWidth: 10, padding: 6, usePointStyle: true } },
+          tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.toLocaleString('pt-BR', {minimumFractionDigits:2}) } }
+        }
+      }
+    });
+
+    // Evolução mai → jun
+    new Chart(document.getElementById('varFlow'), {
+      type: 'bar',
+      data: {
+        labels: ['Mai (fatura paga)', 'Jun (aberta até agora)', 'Jun (projeção)'],
+        datasets: [{
+          label: 'Valor',
+          data: [5794.43, 1214.95, 11600],
+          backgroundColor: ['#16a34a88','#EF9F2788','#E24B4A44'],
+          borderColor: ['#16a34a','#EF9F27','#E24B4A'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits:2}) } }
+        },
+        scales: {
+          x: { ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { color: '#e2e4ec44' } },
+          y: { ticks: { color: '#9ca3af', font: { size: 10 }, callback: v => 'R$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#e2e4ec44' } }
+        }
+      }
+    });
+  }
+}
+
 function switchPage(page, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -881,6 +1107,9 @@ function switchPage(page, el) {
   if (page === 'receitas' && !window._receitaChartsInit) {
     window._receitaChartsInit = true;
     initReceitaCharts();
+  }
+  if (page === 'variaveis') {
+    initVariaveisPage();
   }
 }
 
