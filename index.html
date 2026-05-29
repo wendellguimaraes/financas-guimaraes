@@ -403,7 +403,7 @@
   </div>
   <div class="chart-card">
     <div class="section-title">Distribuição de saídas</div>
-    <div class="chart-wrap"><canvas id="catChart"></canvas></div>
+    <div class="chart-wrap" style="height:240px;"><canvas id="catChart"></canvas></div>
   </div>
 </div>
 
@@ -1115,9 +1115,13 @@ function init() {
       datasets: [{ data: catBudget.map(c => c.val), backgroundColor: catBudget.map(c => c.color), borderWidth: 0, hoverOffset: 6 }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false, cutout: '65%',
+      responsive: true, maintainAspectRatio: false, cutout: '60%',
+      layout: { padding: { top: 4, bottom: 4 } },
       plugins: {
-        legend: { position: 'right', labels: { color: '#6b7280', font: { size: 10 }, boxWidth: 10, padding: 8 } },
+        legend: {
+          position: 'bottom',
+          labels: { color: '#6b7280', font: { size: 10 }, boxWidth: 10, padding: 6, usePointStyle: true }
+        },
         tooltip: { callbacks: { label: ctx => ' ' + fmt(ctx.parsed) } }
       }
     }
