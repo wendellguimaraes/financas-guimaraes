@@ -162,6 +162,30 @@
   .progress-fill { border-radius: 99px; height: 6px; transition: width 0.6s ease; }
 
   .loading { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 14px; }
+  /* DESPESAS FIXAS */
+  .fixas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  @media (max-width: 640px) { .fixas-grid { grid-template-columns: 1fr; } }
+  .fixas-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+  .fixas-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 6px; }
+  .fixas-card-title { font-size: 11px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; }
+  .fixas-card-total { font-size: 15px; font-weight: 600; }
+  .fixas-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+  .fixas-item:last-child { border-bottom: none; }
+  .fixas-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .fixas-info { flex: 1; min-width: 0; }
+  .fixas-nome { font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fixas-cat { font-size: 11px; color: var(--text3); margin-top: 1px; }
+  .fixas-right { text-align: right; flex-shrink: 0; }
+  .fixas-valor { font-size: 13px; font-weight: 600; color: var(--text); }
+  .fixas-vcto { font-size: 10px; color: var(--text3); margin-top: 1px; }
+  .fixas-badge { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 99px; font-weight: 500; }
+  .fixas-badge.pix { background: var(--blue-dim); color: var(--blue); }
+  .fixas-badge.boleto { background: var(--gold-dim); color: var(--gold); }
+  .fixas-badge.cartao { background: var(--red-dim); color: var(--red); }
+  .fixas-total-bar { background: var(--surface2); border-radius: var(--radius-sm); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; margin-top: 12px; flex-wrap: wrap; gap: 8px; }
+  .fixas-total-label { font-size: 12px; color: var(--text2); }
+  .fixas-total-val { font-size: 18px; font-weight: 600; }
+
   /* NAV ABAS PRINCIPAIS */
   .nav-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; width: fit-content; }
   .nav-tab { padding: 8px 20px; border-radius: 10px; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; transition: all 0.15s; border: none; background: none; }
@@ -240,6 +264,7 @@
 
 <div class="nav-tabs">
   <button class="nav-tab active" onclick="switchPage('visao-geral', this)">📊 Visão Geral</button>
+  <button class="nav-tab" onclick="switchPage('despesas-fixas', this)">📌 Despesas Fixas</button>
   <button class="nav-tab" onclick="switchPage('comparativo', this)">📅 Comparativo</button>
 </div>
 
@@ -346,6 +371,170 @@
 <div class="tx-list" id="txList"><div class="loading">Carregando transações...</div></div>
 
 </div><!-- fim page visao-geral -->
+
+<div id="page-despesas-fixas" class="page">
+
+  <div class="fixas-grid">
+
+    <!-- COLUNA 1: PIX / BOLETO -->
+    <div class="fixas-card">
+      <div class="fixas-card-header">
+        <div class="fixas-card-title">🏦 Pix e Boleto</div>
+        <span class="fixas-card-total" style="color:var(--red);">R$ 3.054,28</span>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--red-dim);">💊</div>
+        <div class="fixas-info"><div class="fixas-nome">Unimed SJ Rio Preto</div><div class="fixas-cat">Plano de saúde <span class="fixas-badge boleto">boleto</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 728,87</div><div class="fixas-vcto">vence dia 6</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--blue-dim);">🏠</div>
+        <div class="fixas-info"><div class="fixas-nome">Condomínio R P da L VI</div><div class="fixas-cat">Moradia <span class="fixas-badge boleto">boleto</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 270,00</div><div class="fixas-vcto">vence dia 8</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--gold-dim);">⚡</div>
+        <div class="fixas-info"><div class="fixas-nome">CPFL — Energia elétrica</div><div class="fixas-cat">Utilidade <span class="fixas-badge boleto">boleto</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 233,85</div><div class="fixas-vcto">vence dia 8</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--blue-dim);">📡</div>
+        <div class="fixas-info"><div class="fixas-nome">AW Internet</div><div class="fixas-cat">Internet <span class="fixas-badge boleto">boleto</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 79,90</div><div class="fixas-vcto">vence dia 8</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--blue-dim);">🚗</div>
+        <div class="fixas-info"><div class="fixas-nome">Bradesco Consórcio</div><div class="fixas-cat">Consórcio <span class="fixas-badge boleto">boleto</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 718,08</div><div class="fixas-vcto">vence dia 8</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--gold-dim);">🔧</div>
+        <div class="fixas-info"><div class="fixas-nome">G Angelo Gasques ME</div><div class="fixas-cat">Manutenção <span class="fixas-badge pix">pix</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 190,00</div><div class="fixas-vcto">vence dia 8</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--gold-dim);">🏛️</div>
+        <div class="fixas-info"><div class="fixas-nome">Prefeitura — IPTU</div><div class="fixas-cat">Impostos <span class="fixas-badge boleto">boleto</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 54,58</div><div class="fixas-vcto">vence dia 8</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--green-dim);">🏠</div>
+        <div class="fixas-info"><div class="fixas-nome">Financiamento Casa</div><div class="fixas-cat">Moradia · Caixa <span class="fixas-badge pix">pix</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 695,00</div><div class="fixas-vcto">vence dia 8</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--blue-dim);">📱</div>
+        <div class="fixas-info"><div class="fixas-nome">Vivo — Telefone</div><div class="fixas-cat">Telefonia <span class="fixas-badge boleto">boleto</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 55,00</div><div class="fixas-vcto">vence dia 11</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--blue-dim);">💧</div>
+        <div class="fixas-info"><div class="fixas-nome">SEMAE — Água e esgoto</div><div class="fixas-cat">Utilidade <span class="fixas-badge boleto">boleto</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 25,00</div><div class="fixas-vcto">vence dia 12</div></div>
+      </div>
+
+      <div class="fixas-total-bar">
+        <span class="fixas-total-label">Total Pix / Boleto</span>
+        <span class="fixas-total-val" style="color:var(--red);">R$ 3.054,28</span>
+      </div>
+    </div>
+
+    <!-- COLUNA 2: CARTÃO -->
+    <div class="fixas-card">
+      <div class="fixas-card-header">
+        <div class="fixas-card-title">💳 Cartão de Crédito</div>
+        <span class="fixas-card-total" style="color:var(--red);">R$ 3.148,62</span>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--gold-dim);">⛽</div>
+        <div class="fixas-info"><div class="fixas-nome">Combustível</div><div class="fixas-cat">Petrobras Premmia · ~7x/mês <span class="fixas-badge cartao">cartão</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">~R$ 997,39</div><div class="fixas-vcto">mensal</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--red-dim);">💊</div>
+        <div class="fixas-info"><div class="fixas-nome">Farmácias</div><div class="fixas-cat">Raia, Wladimir, Drogaria <span class="fixas-badge cartao">cartão</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">~R$ 1.179,30</div><div class="fixas-vcto">mensal</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--green-dim);">🍽️</div>
+        <div class="fixas-info"><div class="fixas-nome">Restaurantes</div><div class="fixas-cat">Lanchonete Calcadão e outros <span class="fixas-badge cartao">cartão</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">~R$ 556,93</div><div class="fixas-vcto">mensal</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--blue-dim);">🍎</div>
+        <div class="fixas-info">
+          <div class="fixas-nome">Apple.Com/Bill <span style="font-size:10px;color:var(--gold);font-weight:600;">⚠ verificar 2x</span></div>
+          <div class="fixas-cat">Assinatura digital <span class="fixas-badge cartao">cartão</span></div>
+        </div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 19,90</div><div class="fixas-vcto">mensal</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--blue-dim);">☁️</div>
+        <div class="fixas-info"><div class="fixas-nome">Google One</div><div class="fixas-cat">Armazenamento <span class="fixas-badge cartao">cartão</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 12,50</div><div class="fixas-vcto">mensal</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--blue-dim);">💻</div>
+        <div class="fixas-info"><div class="fixas-nome">Pg *B4a Servicos de Te</div><div class="fixas-cat">Serviço digital · 12x <span class="fixas-badge cartao">cartão</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 64,90</div><div class="fixas-vcto">mensal</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--blue-dim);">🖥️</div>
+        <div class="fixas-info"><div class="fixas-nome">Automarticles</div><div class="fixas-cat">Serviço digital <span class="fixas-badge cartao">cartão</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">~R$ 258,60</div><div class="fixas-vcto">mensal</div></div>
+      </div>
+
+      <div class="fixas-item">
+        <div class="fixas-icon" style="background:var(--blue-dim);">📱</div>
+        <div class="fixas-info"><div class="fixas-nome">Conta Vivo (cartão)</div><div class="fixas-cat">Telefonia <span class="fixas-badge cartao">cartão</span></div></div>
+        <div class="fixas-right"><div class="fixas-valor">R$ 59,00</div><div class="fixas-vcto">mensal</div></div>
+      </div>
+
+      <div class="fixas-total-bar">
+        <span class="fixas-total-label">Total Cartão</span>
+        <span class="fixas-total-val" style="color:var(--red);">~R$ 3.148,62</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TOTAL GERAL -->
+  <div class="chart-card" style="margin-bottom:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Resumo mensal de despesas fixas</div>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;">
+          <div><div style="font-size:11px;color:var(--text3);">Pix / Boleto</div><div style="font-size:16px;font-weight:600;color:var(--red);">R$ 3.054,28</div></div>
+          <div><div style="font-size:11px;color:var(--text3);">Cartão</div><div style="font-size:16px;font-weight:600;color:var(--red);">~R$ 3.148,62</div></div>
+          <div><div style="font-size:11px;color:var(--text3);">Fatura variável</div><div style="font-size:16px;font-weight:600;color:var(--text2);">~R$ 2.705,81</div></div>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Total mensal estimado</div>
+        <div style="font-size:26px;font-weight:700;color:var(--red);">~R$ 8.908,71</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- fim page despesas-fixas -->
+
 
 <div id="page-comparativo" class="page">
   <div class="comp-selectors">
