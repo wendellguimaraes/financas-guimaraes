@@ -355,6 +355,22 @@
       <div class="metric-destaque-sub" id="dTopCatSub">—</div>
     </div>
   </div>
+  <div class="metric-destaque" style="border-left:4px solid var(--green);">
+    <div class="metric-destaque-icon" style="background:var(--green-dim);color:var(--green);">💰</div>
+    <div class="metric-destaque-body">
+      <div class="metric-destaque-label">Receita fixa mensal</div>
+      <div class="metric-destaque-value" style="color:var(--green);">R$ 9.163,65</div>
+      <div class="metric-destaque-sub">Pró-labore Francine + Wendell</div>
+    </div>
+  </div>
+  <div class="metric-destaque" style="border-left:4px solid var(--purple);">
+    <div class="metric-destaque-icon" style="background:#f3e8ff;color:var(--purple);">🔀</div>
+    <div class="metric-destaque-body">
+      <div class="metric-destaque-label">Despesas variáveis</div>
+      <div class="metric-destaque-value" id="dVariaveis" style="color:var(--purple);">—</div>
+      <div class="metric-destaque-sub" id="dVariaveisSub">Gastos além das fixas</div>
+    </div>
+  </div>
 </div>
 
 <!-- METRICS -->
@@ -1017,6 +1033,14 @@ function init() {
   document.getElementById('dEntradasSub').textContent = transactions.filter(t => t.type==='CREDIT' && !isInv(t)).length + ' lançamentos no mês';
   document.getElementById('dDespesas').textContent = fmt(saidas);
   document.getElementById('dDespesasSub').textContent = transactions.filter(t => t.type==='DEBIT' && !isInv(t)).length + ' lançamentos no mês';
+
+  // Despesas variáveis = total saídas - despesas fixas (8908.71)
+  const despesasFixas = 8908.71;
+  const despesasVariaveis = Math.max(0, saidas - despesasFixas);
+  const dVarEl = document.getElementById('dVariaveis');
+  const dVarSubEl = document.getElementById('dVariaveisSub');
+  if (dVarEl) dVarEl.textContent = 'R$ ' + despesasVariaveis.toLocaleString('pt-BR', {minimumFractionDigits:2});
+  if (dVarSubEl) dVarSubEl.textContent = 'R$ ' + despesasFixas.toLocaleString('pt-BR', {minimumFractionDigits:2}) + ' em fixas + R$ ' + despesasVariaveis.toLocaleString('pt-BR', {minimumFractionDigits:2}) + ' variável';
 
   // Maior categoria de gastos
   const catTotals = {};
