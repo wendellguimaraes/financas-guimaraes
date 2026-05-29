@@ -162,6 +162,30 @@
   .progress-fill { border-radius: 99px; height: 6px; transition: width 0.6s ease; }
 
   .loading { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 14px; }
+  /* PROJEÇÃO */
+  .proj-metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; position: relative; overflow: hidden; }
+  .proj-metric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .proj-metric.blue::before { background: var(--blue); }
+  .proj-metric.red::before { background: var(--red); }
+  .proj-metric.green::before { background: var(--green); }
+  .proj-metric.gold::before { background: var(--gold); }
+  .proj-metric.purple::before { background: var(--purple); }
+  .proj-metric-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .proj-metric-value { font-family: 'DM Serif Display', serif; font-size: 22px; }
+  .proj-metric-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+  .proj-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; flex-wrap: wrap; gap: 6px; }
+  .proj-row:last-child { border-bottom: none; }
+  .proj-row-label { color: var(--text2); flex: 1; }
+  .proj-row-val { font-weight: 600; min-width: 110px; text-align: right; }
+  .proj-row-badge { font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500; }
+  .proj-scenario { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+  .proj-scenario-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .proj-bar-wrap { margin: 6px 0 12px; }
+  .proj-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+  .proj-bar-bg { background: var(--surface2); border-radius: 99px; height: 8px; }
+  .proj-bar-fill { border-radius: 99px; height: 8px; transition: width 0.6s ease; }
+  .proj-recomendacao { border-radius: var(--radius-sm); padding: 12px 16px; font-size: 13px; margin-top: 8px; }
+
   /* DESPESAS VARIÁVEIS */
   .var-metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; position: relative; overflow: hidden; }
   .var-metric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--purple); }
@@ -316,6 +340,7 @@
   <button class="nav-tab" onclick="switchPage('receitas', this)">💰 Receitas Fixas</button>
   <button class="nav-tab" onclick="switchPage('despesas-fixas', this)">📌 Despesas Fixas</button>
   <button class="nav-tab" onclick="switchPage('variaveis', this)">🔀 Despesas Variáveis</button>
+  <button class="nav-tab" onclick="switchPage('projecao', this)">🔮 Projeção Próx. Mês</button>
   <button class="nav-tab" onclick="switchPage('comparativo', this)">📅 Comparativo</button>
 </div>
 
@@ -722,6 +747,161 @@
   </div>
   <div id="compArea"></div>
 </div><!-- fim page comparativo -->
+<div id="page-projecao" class="page">
+
+  <p style="font-size:13px;color:var(--text2);margin:0 0 16px;">Projeção baseada nos dados reais de maio/2026 e no ritmo atual da fatura aberta de junho.</p>
+
+  <!-- MÉTRICAS PROJEÇÃO -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px;">
+    <div class="proj-metric green">
+      <div class="proj-metric-label">Receitas fixas</div>
+      <div class="proj-metric-value" style="color:var(--green);">R$ 9.163,65</div>
+      <div class="proj-metric-sub">Pró-labore Francine + Wendell</div>
+    </div>
+    <div class="proj-metric red">
+      <div class="proj-metric-label">Despesas fixas</div>
+      <div class="proj-metric-value" style="color:var(--red);">R$ 8.908,71</div>
+      <div class="proj-metric-sub">Boleto, Pix e recorrências cartão</div>
+    </div>
+    <div class="proj-metric purple">
+      <div class="proj-metric-label">Fatura variável projetada</div>
+      <div class="proj-metric-value" style="color:var(--purple);">~R$ 3.500,00</div>
+      <div class="proj-metric-sub">Base no ritmo atual jun/2026</div>
+    </div>
+    <div class="proj-metric gold">
+      <div class="proj-metric-label">Saldo projetado</div>
+      <div class="proj-metric-value" style="color:var(--red);">- R$ 3.245,06</div>
+      <div class="proj-metric-sub">Receitas fixas − todas despesas</div>
+    </div>
+  </div>
+
+  <!-- GRÁFICO PROJEÇÃO -->
+  <div class="charts" style="margin-bottom:20px;">
+    <div class="chart-card">
+      <div class="section-title">Receitas vs Despesas projetadas — jun/2026</div>
+      <div style="position:relative;height:220px;"><canvas id="projBarChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="section-title">Evolução mensal — últimos 6 meses</div>
+      <div style="position:relative;height:220px;"><canvas id="projLineChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- DETALHAMENTO -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+
+    <div class="proj-scenario">
+      <div class="proj-scenario-title" style="color:var(--red);">📋 Despesas projetadas jun/2026</div>
+
+      <div class="proj-row">
+        <span class="proj-row-label">Despesas fixas (boleto/Pix)</span>
+        <span class="proj-row-val" style="color:var(--red);">R$ 3.054,28</span>
+      </div>
+      <div class="proj-row">
+        <span class="proj-row-label">Recorrências cartão</span>
+        <span class="proj-row-val" style="color:var(--red);">R$ 3.148,62</span>
+      </div>
+      <div class="proj-row">
+        <span class="proj-row-label">Fatura variável projetada</span>
+        <span class="proj-row-val" style="color:var(--purple);">~R$ 3.500,00</span>
+      </div>
+      <div class="proj-row">
+        <span class="proj-row-label">Parcelamentos em aberto</span>
+        <span class="proj-row-val" style="color:var(--gold);">~R$ 801,67</span>
+      </div>
+      <div style="background:var(--red-dim);border-radius:var(--radius-sm);padding:10px 12px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:12px;font-weight:600;color:var(--red);">Total despesas projetado</span>
+        <span style="font-size:18px;font-weight:700;color:var(--red);">~R$ 10.504,57</span>
+      </div>
+
+      <div class="proj-bar-wrap" style="margin-top:14px;">
+        <div class="proj-bar-label"><span>Comprometimento da receita fixa</span><span>114,6%</span></div>
+        <div class="proj-bar-bg"><div class="proj-bar-fill" style="width:100%;background:var(--red);"></div></div>
+      </div>
+    </div>
+
+    <div class="proj-scenario">
+      <div class="proj-scenario-title" style="color:var(--green);">💰 Receitas projetadas jun/2026</div>
+
+      <div class="proj-row">
+        <span class="proj-row-label">Pró-labore Francine</span>
+        <span class="proj-row-val" style="color:var(--green);">R$ 7.833,02</span>
+      </div>
+      <div class="proj-row">
+        <span class="proj-row-label">Pró-labore Wendell (novo)</span>
+        <span class="proj-row-val" style="color:var(--green);">R$ 2.500,00</span>
+      </div>
+      <div class="proj-row">
+        <span class="proj-row-label">Resgates RDB (estimado)</span>
+        <span class="proj-row-val" style="color:var(--gold);">~R$ 500,00</span>
+      </div>
+      <div class="proj-row">
+        <span class="proj-row-label">Receitas eventuais</span>
+        <span class="proj-row-val" style="color:var(--text3);">variável</span>
+      </div>
+      <div style="background:var(--green-dim);border-radius:var(--radius-sm);padding:10px 12px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:12px;font-weight:600;color:var(--green);">Total receitas projetado</span>
+        <span style="font-size:18px;font-weight:700;color:var(--green);">~R$ 10.833,02</span>
+      </div>
+
+      <div class="proj-bar-wrap" style="margin-top:14px;">
+        <div class="proj-bar-label"><span>Cobertura das despesas projetadas</span><span>103,1%</span></div>
+        <div class="proj-bar-bg"><div class="proj-bar-fill" style="width:100%;background:var(--green);"></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CENÁRIOS -->
+  <div class="chart-card" style="margin-bottom:20px;">
+    <div class="section-title" style="margin-bottom:14px;">Cenários para junho</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+
+      <div style="background:var(--green-dim);border-radius:var(--radius-sm);padding:14px;">
+        <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:8px;">✅ Cenário otimista</div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:6px;">Reduz gastos variáveis em 30%</div>
+        <div style="font-size:20px;font-weight:700;color:var(--green);">+ R$ 1.683,02</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Sobra no final do mês</div>
+      </div>
+
+      <div style="background:var(--gold-dim);border-radius:var(--radius-sm);padding:14px;">
+        <div style="font-size:12px;font-weight:600;color:var(--gold);margin-bottom:8px;">⚠️ Cenário realista</div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:6px;">Mantém ritmo atual de gastos</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold);">+ R$ 328,45</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Margem muito apertada</div>
+      </div>
+
+      <div style="background:var(--red-dim);border-radius:var(--radius-sm);padding:14px;">
+        <div style="font-size:12px;font-weight:600;color:var(--red);margin-bottom:8px;">🚨 Cenário pessimista</div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:6px;">Gastos variáveis crescem 20%</div>
+        <div style="font-size:20px;font-weight:700;color:var(--red);">- R$ 1.356,55</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;">Déficit — precisa de receita eventual</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RECOMENDAÇÕES -->
+  <div class="chart-card">
+    <div class="section-title" style="margin-bottom:14px;">💡 Recomendações para junho</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="proj-recomendacao" style="background:var(--green-dim);color:var(--green);">
+        <strong>✅ Pró-labore Wendell novo (R$ 2.500)</strong> — já aumenta a margem para R$ 328/mês no cenário realista. Priorize receber no dia 15 e no final do mês conforme combinado.
+      </div>
+      <div class="proj-recomendacao" style="background:var(--red-dim);color:var(--red);">
+        <strong>⚠️ Farmácia em alta (R$ 479 em 10 dias)</strong> — Drogaria Santa Terez com R$ 431 de uma só compra. Verifique se há medicamentos de uso contínuo para negociar preço ou buscar genéricos.
+      </div>
+      <div class="proj-recomendacao" style="background:var(--gold-dim);color:var(--gold);">
+        <strong>⛽ Combustível recorrente (~R$ 264 até agora)</strong> — ritmo alto. Considere abastecer em postos com programa de fidelidade ou cashback para reduzir o impacto.
+      </div>
+      <div class="proj-recomendacao" style="background:var(--blue-dim);color:var(--blue);">
+        <strong>📌 Meta para junho:</strong> manter gastos variáveis abaixo de R$ 2.800 para fechar o mês no positivo sem depender de receitas eventuais.
+      </div>
+    </div>
+  </div>
+
+</div><!-- fim page projecao -->
+
 <div id="page-variaveis" class="page">
 
   <!-- MÉTRICAS -->
@@ -950,6 +1130,70 @@ const origSwitch = window.switchPage;
 
 // ─── NAVEGAÇÃO ───────────────────────────────────────────────────────────────
 
+
+// ─── PROJEÇÃO ────────────────────────────────────────────────────────────────
+function initProjecaoPage() {
+  if (window._projInit) return;
+  window._projInit = true;
+
+  // Barras receitas vs despesas
+  new Chart(document.getElementById('projBarChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Receitas Fixas', 'Desp. Fixas', 'Fatura Variável', 'Parcelamentos', 'Total Receitas', 'Total Despesas'],
+      datasets: [
+        { label: 'Receitas', data: [9163.65, 0, 0, 0, 10833.02, 0], backgroundColor: '#16a34a88', borderColor: '#16a34a', borderWidth: 1 },
+        { label: 'Despesas', data: [0, 8908.71, 3500, 801.67, 0, 10504.57], backgroundColor: '#dc262688', borderColor: '#dc2626', borderWidth: 1 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#6b7280', font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits:2}) } }
+      },
+      scales: {
+        x: { ticks: { color: '#9ca3af', font: { size: 9 } }, grid: { color: '#e2e4ec44' } },
+        y: { ticks: { color: '#9ca3af', font: { size: 10 }, callback: v => 'R$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#e2e4ec44' } }
+      }
+    }
+  });
+
+  // Linha histórica
+  new Chart(document.getElementById('projLineChart'), {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun (proj)'],
+      datasets: [
+        {
+          label: 'Fatura cartão',
+          data: [8178, 9185.36, 8293.17, 8277.41, 5794.43, 10504.57],
+          borderColor: '#dc2626', backgroundColor: '#dc262622',
+          tension: 0.4, fill: true, borderWidth: 2, pointRadius: 4
+        },
+        {
+          label: 'Receita fixa',
+          data: [9163.65, 9163.65, 9163.65, 9163.65, 9163.65, 10833.02],
+          borderColor: '#16a34a', backgroundColor: '#16a34a22',
+          tension: 0.4, fill: true, borderWidth: 2, pointRadius: 4,
+          borderDash: [5, 5]
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#6b7280', font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits:2}) } }
+      },
+      scales: {
+        x: { ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { color: '#e2e4ec44' } },
+        y: { ticks: { color: '#9ca3af', font: { size: 10 }, callback: v => 'R$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#e2e4ec44' } }
+      }
+    }
+  });
+}
+
 // ─── DESPESAS VARIÁVEIS ──────────────────────────────────────────────────────
 function initVariaveisPage() {
   // Dias para fechar
@@ -1110,6 +1354,9 @@ function switchPage(page, el) {
   }
   if (page === 'variaveis') {
     initVariaveisPage();
+  }
+  if (page === 'projecao') {
+    initProjecaoPage();
   }
 }
 
