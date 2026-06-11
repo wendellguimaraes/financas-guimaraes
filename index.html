@@ -379,6 +379,17 @@
   <div class="live-badge"><span class="live-dot"></span> Ao vivo · Nubank</div>
 </div>
 
+<!-- FILTRO MÊS -->
+<div class="month-filter-bar">
+  <span class="month-filter-label">Mês</span>
+  <button class="month-btn" onclick="setMonthFilter('visao','2026-03',this)">Mar/26</button>
+  <button class="month-btn" onclick="setMonthFilter('visao','2026-04',this)">Abr/26</button>
+  <button class="month-btn active" onclick="setMonthFilter('visao','2026-05',this)">Mai/26</button>
+  <button class="month-btn" onclick="setMonthFilter('visao','2026-06',this)">Jun/26</button>
+  <span class="month-info-badge" id="visao-month-badge">Exibindo: Maio 2026</span>
+</div>
+<div id="visao-month-note" style="display:none;background:var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:12px;color:var(--gold);margin-bottom:16px;"></div>
+
 <!-- SALDO BAR -->
 <div class="saldo-bar">
   <div class="saldo-item">
@@ -1710,7 +1721,7 @@ const monthNames = {
   '2026-07':'Julho 2026','2026-08':'Agosto 2026','2026-09':'Setembro 2026',
   '2026-10':'Outubro 2026','2026-11':'Novembro 2026','2026-12':'Dezembro 2026'
 };
-const selectedMonths = { receitas: '2026-05', fixas: '2026-05', variaveis: '2026-05' };
+const selectedMonths = { visao: '2026-05', receitas: '2026-05', fixas: '2026-05', variaveis: '2026-05' };
 
 function setMonthFilter(section, month, el) {
   selectedMonths[section] = month;
