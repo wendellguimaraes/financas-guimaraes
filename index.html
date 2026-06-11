@@ -1654,7 +1654,7 @@ function renderAlimentacao(month) {
   const baldes = [
     { key:'mercado', nome:'Mercado', emoji:'🛒', cor:'#639922', dim:'#1a3d0e', desc:'Supermercado · comer em casa', val:d.mercado },
     { key:'essencial', nome:'Essencial', emoji:'🍱', cor:'#378ADD', dim:'#152044', desc:'Almoço de trabalho · refeições necessárias', val:d.essencial },
-    { key:'discricionario', nome:'Discricionário', emoji:'🍕', cor:'#D85A30', dim:'#3a1a0e', desc:'Delivery noturno · fim de semana · lazer', val:d.discricionario }
+    { key:'discricionario', nome:'Desnecessário', emoji:'🍕', cor:'#D85A30', dim:'#3a1a0e', desc:'Delivery noturno · fim de semana · lazer', val:d.discricionario }
   ];
   document.getElementById('al-baldes').innerHTML = baldes.map(b => {
     const teto = TETOS[b.key];
@@ -1681,17 +1681,37 @@ function renderAlimentacao(month) {
     '</div>';
   }).join('');
 
-  const baldeInfo = { mercado:{cor:'#639922',nome:'Mercado'}, essencial:{cor:'#378ADD',nome:'Essencial'}, discricionario:{cor:'#D85A30',nome:'Discricionário'} };
+  const baldeInfo = { mercado:{cor:'#639922',nome:'Mercado'}, essencial:{cor:'#378ADD',nome:'Essencial'}, discricionario:{cor:'#D85A30',nome:'Desnecessário'} };
   const itens = [...d.itens].sort((a,b)=>b.v-a.v);
   set('al-list-header', itens.length + ' lançamentos · ' + mesCurto);
-  document.getElementById('al-list').innerHTML = itens.map(t => {
-    const bi = baldeInfo[t.b];
-    return '<div class="receita-item">' +
-      '<div class="receita-icon" style="background:var(--surface2);color:'+bi.cor+';font-size:11px;font-weight:600;">'+t.d+'</div>' +
-      '<div class="receita-info"><div class="receita-nome">'+t.n+'</div><div class="receita-sub" style="color:'+bi.cor+';">'+bi.nome+'</div></div>' +
-      '<div class="receita-right"><div class="receita-valor">'+f(t.v)+'</div></div>' +
-    '</div>';
-  }).join('');
+
+  const ordem = [
+    { key:'mercado', emoji:'🛒' },
+    { key:'essencial', emoji:'🍱' },
+    { key:'discricionario', emoji:'🍕' }
+  ];
+  let listHTML = '';
+  ordem.forEach(grp => {
+    const bi = baldeInfo[grp.key];
+    const itensGrp = itens.filter(t => t.b === grp.key);
+    if (itensGrp.length === 0) return;
+    const subtotal = itensGrp.reduce((s,t)=>s+t.v,0);
+    listHTML += '<div style="display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border);">' +
+        '<span style="font-size:12px;font-weight:600;color:'+bi.cor+';display:flex;align-items:center;gap:6px;">' +
+          '<span style="width:8px;height:8px;border-radius:2px;background:'+bi.cor+';display:inline-block;"></span>' +
+          grp.emoji + ' ' + bi.nome + ' <span style="color:var(--text3);font-weight:400;">· ' + itensGrp.length + (itensGrp.length>1?' lançamentos':' lançamento') + '</span>' +
+        '</span>' +
+        '<span style="font-size:13px;font-weight:700;color:'+bi.cor+';">'+f(subtotal)+'</span>' +
+      '</div>';
+    listHTML += itensGrp.map(t =>
+      '<div class="receita-item">' +
+        '<div class="receita-icon" style="background:var(--surface2);color:'+bi.cor+';font-size:11px;font-weight:600;">'+t.d+'</div>' +
+        '<div class="receita-info"><div class="receita-nome">'+t.n+'</div></div>' +
+        '<div class="receita-right"><div class="receita-valor">'+f(t.v)+'</div></div>' +
+      '</div>'
+    ).join('');
+  });
+  document.getElementById('al-list').innerHTML = listHTML;
 
   const note = document.getElementById('al-note');
   if (note) note.innerHTML = '💡 ' + d.nota;
@@ -1704,7 +1724,7 @@ function renderAlimentacao(month) {
       datasets: [
         { label:'Mercado', data:[691.47,243.94,106.41,226.09], backgroundColor:'#639922' },
         { label:'Essencial', data:[528.00,245.88,157.90,49.90], backgroundColor:'#378ADD' },
-        { label:'Discricionário', data:[367.22,355.62,215.80,69.93], backgroundColor:'#D85A30' }
+        { label:'Desnecessário', data:[367.22,355.62,215.80,69.93], backgroundColor:'#D85A30' }
       ]
     },
     options: {
