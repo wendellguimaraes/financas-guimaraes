@@ -162,6 +162,32 @@
   .progress-fill { border-radius: 99px; height: 6px; transition: width 0.6s ease; }
 
   .loading { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 14px; }
+
+  /* MONTH FILTER */
+  .month-filter-bar {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .month-filter-label {
+    font-size: 11px; color: var(--text2); text-transform: uppercase;
+    letter-spacing: 0.08em; margin-right: 4px;
+  }
+  .month-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 99px; padding: 6px 14px;
+    font-size: 12px; color: var(--text2); cursor: pointer;
+    transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+  }
+  .month-btn:hover { border-color: var(--text2); color: var(--text); }
+  .month-btn.active {
+    background: var(--text); color: var(--bg);
+    border-color: var(--text); font-weight: 500;
+  }
+  .month-info-badge {
+    margin-left: auto; font-size: 11px; color: var(--text3);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 99px; padding: 4px 12px;
+  }
   /* PROJEÇÃO */
   .proj-metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; position: relative; overflow: hidden; }
   .proj-metric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
@@ -475,6 +501,17 @@
 
 <div id="page-receitas" class="page">
 
+  <!-- FILTRO MÊS -->
+  <div class="month-filter-bar">
+    <span class="month-filter-label">Mês</span>
+    <button class="month-btn" onclick="setMonthFilter('receitas','2026-03',this)">Mar/26</button>
+    <button class="month-btn" onclick="setMonthFilter('receitas','2026-04',this)">Abr/26</button>
+    <button class="month-btn active" onclick="setMonthFilter('receitas','2026-05',this)">Mai/26</button>
+    <button class="month-btn" onclick="setMonthFilter('receitas','2026-06',this)">Jun/26</button>
+    <span class="month-info-badge" id="receitas-month-badge">Exibindo: Maio 2026</span>
+  </div>
+  <div id="receitas-month-note" style="display:none;background:var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:12px;color:var(--gold);margin-bottom:16px;"></div>
+
   <!-- MÉTRICAS -->
   <div class="receitas-grid">
     <div class="receita-metric">
@@ -567,6 +604,17 @@
 </div><!-- fim page receitas -->
 
 <div id="page-despesas-fixas" class="page">
+
+  <!-- FILTRO MÊS -->
+  <div class="month-filter-bar">
+    <span class="month-filter-label">Mês</span>
+    <button class="month-btn" onclick="setMonthFilter('fixas','2026-03',this)">Mar/26</button>
+    <button class="month-btn" onclick="setMonthFilter('fixas','2026-04',this)">Abr/26</button>
+    <button class="month-btn active" onclick="setMonthFilter('fixas','2026-05',this)">Mai/26</button>
+    <button class="month-btn" onclick="setMonthFilter('fixas','2026-06',this)">Jun/26</button>
+    <span class="month-info-badge" id="fixas-month-badge">Exibindo: Maio 2026</span>
+  </div>
+  <div id="fixas-month-note" style="display:none;background:var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:12px;color:var(--gold);margin-bottom:16px;"></div>
 
   <div class="fixas-grid">
 
@@ -903,6 +951,17 @@
 </div><!-- fim page projecao -->
 
 <div id="page-variaveis" class="page">
+
+  <!-- FILTRO MÊS -->
+  <div class="month-filter-bar">
+    <span class="month-filter-label">Mês</span>
+    <button class="month-btn" onclick="setMonthFilter('variaveis','2026-03',this)">Mar/26</button>
+    <button class="month-btn" onclick="setMonthFilter('variaveis','2026-04',this)">Abr/26</button>
+    <button class="month-btn active" onclick="setMonthFilter('variaveis','2026-05',this)">Mai/26</button>
+    <button class="month-btn" onclick="setMonthFilter('variaveis','2026-06',this)">Jun/26</button>
+    <span class="month-info-badge" id="variaveis-month-badge">Exibindo: Maio 2026</span>
+  </div>
+  <div id="variaveis-month-note" style="display:none;background:var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:12px;color:var(--gold);margin-bottom:16px;"></div>
 
   <!-- MÉTRICAS -->
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px;">
@@ -1644,6 +1703,31 @@ function renderTx(filter) {
   }).join('');
 }
 
+// ─── FILTRO DE MÊS ────────────────────────────────────────────────────────────
+const monthNames = {
+  '2026-01':'Janeiro 2026','2026-02':'Fevereiro 2026','2026-03':'Março 2026',
+  '2026-04':'Abril 2026','2026-05':'Maio 2026','2026-06':'Junho 2026',
+  '2026-07':'Julho 2026','2026-08':'Agosto 2026','2026-09':'Setembro 2026',
+  '2026-10':'Outubro 2026','2026-11':'Novembro 2026','2026-12':'Dezembro 2026'
+};
+const selectedMonths = { receitas: '2026-05', fixas: '2026-05', variaveis: '2026-05' };
+
+function setMonthFilter(section, month, el) {
+  selectedMonths[section] = month;
+  const bar = el.closest('.month-filter-bar');
+  bar.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const badge = document.getElementById(section + '-month-badge');
+  if (badge) badge.textContent = 'Exibindo: ' + (monthNames[month] || month);
+
+  const note = document.getElementById(section + '-month-note');
+  const isCurrent = month === '2026-05';
+  if (note) {
+    note.style.display = isCurrent ? 'none' : 'flex';
+    if (!isCurrent) note.textContent = '📅 Dados históricos de ' + (monthNames[month] || month) + ' — visão de referência. Novos extratos serão integrados conforme disponíveis.';
+  }
+}
+
 init();
 
 // Auto-refresh a cada 5min
@@ -1653,3 +1737,4 @@ setInterval(() => {
 </script>
 </body>
 </html>
+
