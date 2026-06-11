@@ -1388,7 +1388,8 @@ const despFixasData = {
     {nome:'IPTU Prefeitura',sub:'Imposto',valor:54.58,emoji:'🏛️'},
   ], nota:'Março sem financiamento Caixa lançado na conta e sem CPFL/SEMAE no extrato — total fixo menor.' },
   '2026-04': { items:[
-    {nome:'Caixa — Financiamento',sub:'Habitação',valor:697.46,emoji:'🏠'},
+    {nome:'Caixa — Financiamento',sub:'Habitação · boleto',valor:697.46,emoji:'🏠'},
+    {nome:'Caixa — Financiamento (Pix Wendell)',sub:'Habitação · Pix',valor:680.00,emoji:'🏠'},
     {nome:'Unimed',sub:'Plano de saúde',valor:643.62,emoji:'💊'},
     {nome:'Consórcio Bradesco',sub:'Consórcio veículo',valor:683.42,emoji:'🚗'},
     {nome:'Condomínio',sub:'Moradia',valor:270.00,emoji:'🏠'},
@@ -1396,11 +1397,11 @@ const despFixasData = {
     {nome:'AW Internet',sub:'Internet',valor:79.90,emoji:'📡'},
     {nome:'VIVO Telefone',sub:'Telefonia',valor:55.00,emoji:'📱'},
     {nome:'IPTU Prefeitura',sub:'Imposto',valor:54.58,emoji:'🏛️'},
-  ], nota:'Abril já mostra o financiamento da Caixa (R$ 697) — paga via boleto, por isso não aparecia no extrato de maio.' },
+  ], nota:'Abril teve dois pagamentos à Caixa: boleto (R$ 697) e Pix ao Wendell (R$ 680), ambos financiamento.' },
   '2026-05': { items:[
     {nome:'Unimed',sub:'Plano de saúde',valor:728.87,emoji:'💊'},
     {nome:'Consórcio Bradesco',sub:'Consórcio veículo',valor:718.08,emoji:'🚗'},
-    {nome:'Caixa — Financiamento',sub:'Habitação (via Pix)',valor:695.00,emoji:'🏠'},
+    {nome:'Caixa — Financiamento (Pix Wendell)',sub:'Habitação · Pix',valor:695.00,emoji:'🏠'},
     {nome:'Condomínio',sub:'Moradia',valor:270.00,emoji:'🏠'},
     {nome:'CPFL Energia',sub:'Energia elétrica',valor:233.85,emoji:'⚡'},
     {nome:'Hidronat "natação"',sub:'Mensalidade',valor:190.00,emoji:'🏊'},
@@ -1412,11 +1413,12 @@ const despFixasData = {
   '2026-06': { items:[
     {nome:'Unimed',sub:'Plano de saúde',valor:1110.09,emoji:'💊'},
     {nome:'Consórcio Bradesco',sub:'Consórcio veículo',valor:737.58,emoji:'🚗'},
+    {nome:'Caixa — Financiamento (Pix Wendell)',sub:'Habitação · Pix',valor:681.00,emoji:'🏠'},
     {nome:'Condomínio',sub:'Moradia',valor:270.00,emoji:'🏠'},
     {nome:'Hidronat "natação"',sub:'Mensalidade',valor:190.00,emoji:'🏊'},
     {nome:'AW Internet',sub:'Internet',valor:79.90,emoji:'📡'},
     {nome:'IPTU Prefeitura',sub:'Imposto',valor:54.58,emoji:'🏛️'},
-  ], nota:'Junho (parcial até 10/06): Unimed veio mais alta (R$ 1.110). CPFL, SEMAE e financiamento ainda não lançados no período.' },
+  ], nota:'Junho (parcial até 10/06): financiamento via Pix ao Wendell (R$ 681) já lançado. Unimed veio mais alta (R$ 1.110).' },
 };
 
 const despVarData = {
@@ -1431,12 +1433,11 @@ const despVarData = {
   '2026-04': { items:[
     {nome:'Fatura cartão',sub:'Pagamento de fatura',valor:8277.41,emoji:'💳'},
     {nome:'Detran',sub:'Débito veículo',valor:800.33,emoji:'🚘'},
-    {nome:'Pix — Wendell',sub:'Transferência',valor:680.00,emoji:'↗'},
     {nome:'Convênios diversos',sub:'Pagamentos avulsos',valor:231.00,emoji:'🧾'},
     {nome:'Pix — Fernanda',sub:'Transferência',valor:200.00,emoji:'↗'},
     {nome:'Pix — Ana Paula',sub:'Transferência',valor:120.00,emoji:'↗'},
     {nome:'Pix — Maria Carolina',sub:'Transferência',valor:10.00,emoji:'↗'},
-  ], nota:'Abril: gasto variável quase todo na fatura do cartão (R$ 8.277) e no Detran.' },
+  ], nota:'Abril: gasto variável quase todo na fatura do cartão (R$ 8.277) e no Detran. O Pix ao Wendell virou financiamento (fixo).' },
   '2026-05': { items:[
     {nome:'Fatura cartão',sub:'Pagamento de fatura',valor:5794.43,emoji:'💳'},
     {nome:'Pix — Francine',sub:'Transferência própria',valor:3000.00,emoji:'↗'},
@@ -1451,10 +1452,9 @@ const despVarData = {
     {nome:'Pix — Claudio Pessoa',sub:'Transferência',valor:4000.00,emoji:'↗'},
     {nome:'Clínica Boscaini',sub:'Estética · Pix',valor:2700.00,emoji:'🏥'},
     {nome:'Pix — Nathalia Pedrocchi',sub:'Transferência',valor:1354.68,emoji:'↗'},
-    {nome:'Pix — Wendell',sub:'Transferência',valor:681.00,emoji:'↗'},
     {nome:'FGV — Curso',sub:'Educação',valor:404.31,emoji:'🎓'},
     {nome:'Convênios diversos',sub:'Pagamentos avulsos',valor:113.73,emoji:'🧾'},
-  ], nota:'Junho (parcial): Pix de R$ 4.000 para Claudio e R$ 2.700 para clínica de estética puxaram o variável.' },
+  ], nota:'Junho (parcial): Pix de R$ 4.000 para Claudio e R$ 2.700 para clínica de estética puxaram o variável. O Pix ao Wendell virou financiamento (fixo).' },
 };
 
 let _dfChart = null, _dvChart = null;
