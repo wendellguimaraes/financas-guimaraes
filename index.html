@@ -383,6 +383,7 @@
   <button class="nav-tab" onclick="switchPage('receitas', this)">💰 Receitas</button>
   <button class="nav-tab" onclick="switchPage('despesas-fixas', this)">📌 Despesas Fixas</button>
   <button class="nav-tab" onclick="switchPage('variaveis', this)">🔀 Despesas Variáveis</button>
+  <button class="nav-tab" onclick="switchPage('alimentacao', this)">🍽️ Alimentação</button>
   <button class="nav-tab" onclick="switchPage('projecao', this)">🔮 Projeção Próx. Mês</button>
   <button class="nav-tab" onclick="switchPage('comparativo', this)">📅 Comparativo</button>
   <button class="nav-tab" onclick="switchPage('objetivos', this)">🎯 Objetivos</button>
@@ -1008,6 +1009,64 @@
 </div><!-- fim page objetivos -->
 
 
+<div id="page-alimentacao" class="page">
+
+  <!-- FILTRO MÊS -->
+  <div class="month-filter-bar">
+    <span class="month-filter-label">Mês</span>
+    <button class="month-btn" onclick="setMonthFilter('alimentacao','2026-03',this)">Mar/26</button>
+    <button class="month-btn" onclick="setMonthFilter('alimentacao','2026-04',this)">Abr/26</button>
+    <button class="month-btn active" onclick="setMonthFilter('alimentacao','2026-05',this)">Mai/26</button>
+    <button class="month-btn" onclick="setMonthFilter('alimentacao','2026-06',this)">Jun/26</button>
+    <span class="month-info-badge" id="alimentacao-month-badge">Exibindo: Maio 2026</span>
+  </div>
+
+  <!-- TOTAL DO MÊS -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px;">
+    <div class="var-metric">
+      <div class="var-metric-label">Total alimentação no mês</div>
+      <div class="var-metric-value" id="al-total" style="color:var(--gold);">—</div>
+      <div class="var-metric-sub" id="al-total-sub">Mercado + refeições</div>
+    </div>
+    <div class="var-metric">
+      <div class="var-metric-label">Teto total definido</div>
+      <div class="var-metric-value" style="color:var(--text2);">R$ 1.000,00</div>
+      <div class="var-metric-sub">Soma dos 3 baldes</div>
+    </div>
+    <div class="var-metric">
+      <div class="var-metric-label">Situação do mês</div>
+      <div class="var-metric-value" id="al-status">—</div>
+      <div class="var-metric-sub" id="al-status-sub">vs teto total</div>
+    </div>
+  </div>
+
+  <!-- BALDES -->
+  <div class="section-title" style="margin-bottom:12px;"><span>Os 3 baldes — gasto vs teto</span></div>
+  <div id="al-baldes" style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;"></div>
+
+  <!-- GRÁFICO EVOLUÇÃO -->
+  <div class="chart-card" style="margin-bottom:20px;">
+    <div class="section-title">Evolução por balde (mar → jun)</div>
+    <div style="position:relative;height:240px;"><canvas id="alChart"></canvas></div>
+  </div>
+
+  <!-- LISTA DETALHADA -->
+  <div class="receita-section-title">
+    <span>🧾 Lançamentos do mês</span>
+    <span id="al-list-header" style="color:var(--text3);">—</span>
+  </div>
+  <div class="receita-list" id="al-list"></div>
+
+  <div id="al-note" style="background:var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:13px;color:var(--gold);margin-top:16px;margin-bottom:20px;"></div>
+
+  <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+    <button onclick="sendPrompt('Como reduzir meu gasto com delivery sem cortar o almoço de trabalho?')">Dicas para o delivery ↗</button>
+    <button onclick="sendPrompt('Revise meus tetos de alimentação com base nos últimos meses')">Revisar tetos ↗</button>
+  </div>
+
+</div><!-- fim page alimentacao -->
+
+
 <div class="footer" id="footer">Atualizado automaticamente via Open Finance · Nubank · Família Guimarães</div>
 
 <script>
@@ -1484,6 +1543,182 @@ function renderDespesasVar(month) {
 function initFixasPage()     { renderDespesasFixas(selectedMonths.fixas || '2026-05'); }
 function initVariaveisPage() { renderDespesasVar(selectedMonths.variaveis || '2026-05'); }
 
+// ─── DADOS DE ALIMENTAÇÃO POR MÊS (Open Finance · cartão de crédito) ──────────
+const TETOS = { mercado: 400, essencial: 350, discricionario: 250 };
+const alimentacaoData = {
+  '2026-03': {
+    mercado: 691.47, essencial: 528.00, discricionario: 367.22,
+    parcial: false,
+    itens: [
+      {d:'30/03',n:'Supermercados Proença',v:86.00,b:'mercado'},
+      {d:'27/03',n:'Andreas Food',v:49.80,b:'essencial'},
+      {d:'26/03',n:'Supermercados Proença',v:97.18,b:'mercado'},
+      {d:'24/03',n:'Supermercados Proença',v:53.91,b:'mercado'},
+      {d:'24/03',n:'Lanchonete Calçadão (almoço)',v:17.00,b:'essencial'},
+      {d:'21/03',n:'iFood',v:60.89,b:'discricionario'},
+      {d:'20/03',n:'Supermercados Proença',v:212.64,b:'mercado'},
+      {d:'18/03',n:'Andreas Food',v:73.90,b:'essencial'},
+      {d:'13/03',n:'GV Delivery Express',v:77.04,b:'discricionario'},
+      {d:'10/03',n:'Brazilian Gourmet',v:70.10,b:'essencial'},
+      {d:'08/03',n:'Slechi Sorvetes e Açaí',v:42.50,b:'discricionario'},
+      {d:'06/03',n:'iFood',v:60.79,b:'discricionario'},
+      {d:'05/03',n:'Brazilian Gourmet',v:82.20,b:'essencial'},
+      {d:'04/03',n:'iFood',v:66.89,b:'discricionario'},
+      {d:'01/03',n:'Bella Capri Pizzaria',v:53.45,b:'discricionario'}
+    ],
+    nota: 'Março foi o mês mais alto do período — muito mercado (R$ 691) e bastante restaurante. Os 3 baldes estouraram os tetos.'
+  },
+  '2026-04': {
+    mercado: 243.94, essencial: 245.88, discricionario: 355.62,
+    parcial: false,
+    itens: [
+      {d:'24/04',n:'Lanchonete Calçadão (almoço)',v:17.00,b:'essencial'},
+      {d:'18/04',n:'Supermercados Proença',v:28.82,b:'mercado'},
+      {d:'17/04',n:'iFood',v:55.98,b:'discricionario'},
+      {d:'16/04',n:'iFood',v:35.98,b:'discricionario'},
+      {d:'16/04',n:'Lanchonete Nossa Senhora',v:21.50,b:'essencial'},
+      {d:'15/04',n:'Fruttos Restaurante',v:69.98,b:'essencial'},
+      {d:'11/04',n:'iFood',v:55.98,b:'discricionario'},
+      {d:'09/04',n:'Andreas Food',v:45.80,b:'essencial'},
+      {d:'06/04',n:'Supermercados Proença',v:95.54,b:'mercado'},
+      {d:'05/04',n:'Bella Capri Pizzaria',v:81.90,b:'discricionario'},
+      {d:'05/04',n:'Supermercados Proença',v:60.77,b:'mercado'},
+      {d:'03/04',n:'iFood',v:85.89,b:'discricionario'},
+      {d:'02/04',n:'iFood',v:39.89,b:'discricionario'},
+      {d:'02/04',n:'Brazilian Gourmet',v:78.10,b:'essencial'}
+    ],
+    nota: 'Abril: o delivery (discricionário, R$ 356) passou do teto. Mercado e almoço ficaram dentro. Foco em reduzir iFood.'
+  },
+  '2026-05': {
+    mercado: 106.41, essencial: 157.90, discricionario: 215.80,
+    parcial: false,
+    itens: [
+      {d:'30/05',n:'Zp M I S Bar e Lanchonete',v:80.00,b:'discricionario'},
+      {d:'29/05',n:'Restaurante Estoril',v:25.00,b:'discricionario'},
+      {d:'27/05',n:'Lanchonete Calçadão (almoço)',v:17.00,b:'essencial'},
+      {d:'23/05',n:'Café Conchego',v:28.00,b:'discricionario'},
+      {d:'20/05',n:'Lanchonete Calçadão (almoço)',v:17.00,b:'essencial'},
+      {d:'14/05',n:'Supermercados Proença',v:32.23,b:'mercado'},
+      {d:'12/05',n:'Lanchonete Calçadão (almoço)',v:17.00,b:'essencial'},
+      {d:'10/05',n:'Supermercados Proença',v:17.49,b:'mercado'},
+      {d:'08/05',n:'Superfoods Alimentação',v:38.90,b:'essencial'},
+      {d:'07/05',n:'Lanchonete Calçadão (almoço)',v:17.00,b:'essencial'},
+      {d:'05/05',n:'Juras Food',v:26.00,b:'essencial'},
+      {d:'01/05',n:'Pizzaria Beija Flor',v:107.80,b:'discricionario'}
+    ],
+    nota: 'Maio foi o melhor mês: tudo dentro dos tetos! Mercado baixo (mais refeições fora) e delivery controlado.'
+  },
+  '2026-06': {
+    mercado: 226.09, essencial: 49.90, discricionario: 69.93,
+    parcial: true,
+    itens: [
+      {d:'09/06',n:'Lanchonete Balalaika',v:27.00,b:'essencial'},
+      {d:'07/06',n:'Supermercados Proença',v:40.99,b:'mercado'},
+      {d:'05/06',n:'Andreas Food',v:22.90,b:'essencial'},
+      {d:'04/06',n:'Supermercados Proença',v:185.10,b:'mercado'},
+      {d:'03/06',n:'iFood',v:69.93,b:'discricionario'}
+    ],
+    nota: 'Junho (parcial até 10/06): ritmo bom até agora. Uma compra grande de mercado (R$ 185) no dia 4.'
+  }
+};
+
+let _alChart = null;
+
+function renderAlimentacao(month) {
+  const d = alimentacaoData[month] || alimentacaoData['2026-05'];
+  const total = d.mercado + d.essencial + d.discricionario;
+  const tetoTotal = TETOS.mercado + TETOS.essencial + TETOS.discricionario;
+  const f = v => 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  const set = (id,v)=>{ const e=document.getElementById(id); if(e) e.textContent=v; };
+  const mes = (monthNames[month] || month);
+  const mesCurto = mes.slice(0,3).toLowerCase() + '/' + month.slice(2,4);
+
+  set('al-total', f(total));
+  set('al-total-sub', d.parcial ? 'Parcial (até dia 10)' : 'Mês fechado');
+
+  const statusEl = document.getElementById('al-status');
+  const statusSub = document.getElementById('al-status-sub');
+  if (statusEl) {
+    if (d.parcial) {
+      statusEl.textContent = 'Em curso'; statusEl.style.color = 'var(--blue)';
+      if (statusSub) statusSub.textContent = 'mês ainda aberto';
+    } else if (total <= tetoTotal) {
+      statusEl.textContent = '✓ Dentro'; statusEl.style.color = 'var(--green)';
+      if (statusSub) statusSub.textContent = f(tetoTotal - total) + ' abaixo do teto';
+    } else {
+      statusEl.textContent = '✗ Acima'; statusEl.style.color = 'var(--red)';
+      if (statusSub) statusSub.textContent = f(total - tetoTotal) + ' acima do teto';
+    }
+  }
+
+  const baldes = [
+    { key:'mercado', nome:'Mercado', emoji:'🛒', cor:'#639922', dim:'#1a3d0e', desc:'Supermercado · comer em casa', val:d.mercado },
+    { key:'essencial', nome:'Essencial', emoji:'🍱', cor:'#378ADD', dim:'#152044', desc:'Almoço de trabalho · refeições necessárias', val:d.essencial },
+    { key:'discricionario', nome:'Discricionário', emoji:'🍕', cor:'#D85A30', dim:'#3a1a0e', desc:'Delivery noturno · fim de semana · lazer', val:d.discricionario }
+  ];
+  document.getElementById('al-baldes').innerHTML = baldes.map(b => {
+    const teto = TETOS[b.key];
+    const pct = Math.min(100, Math.round(b.val/teto*100));
+    const pctReal = Math.round(b.val/teto*100);
+    const over = b.val > teto && !d.parcial;
+    const barColor = over ? '#e05c5c' : b.cor;
+    return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;">' +
+      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">' +
+        '<div style="width:36px;height:36px;border-radius:8px;background:'+b.dim+';display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">'+b.emoji+'</div>' +
+        '<div style="flex:1;min-width:0;">' +
+          '<div style="font-size:14px;font-weight:600;color:var(--text);">'+b.nome+'</div>' +
+          '<div style="font-size:11px;color:var(--text3);">'+b.desc+'</div>' +
+        '</div>' +
+        '<div style="text-align:right;flex-shrink:0;">' +
+          '<div style="font-size:15px;font-weight:700;color:'+(over?'#e05c5c':b.cor)+';">'+f(b.val)+'</div>' +
+          '<div style="font-size:11px;color:var(--text3);">teto '+f(teto)+'</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="background:var(--surface2);border-radius:99px;height:7px;overflow:hidden;">' +
+        '<div style="height:100%;width:'+pct+'%;background:'+barColor+';border-radius:99px;transition:width 0.5s;"></div>' +
+      '</div>' +
+      '<div style="font-size:11px;color:'+(over?'#e05c5c':'var(--text3)')+';margin-top:4px;text-align:right;">'+pctReal+'% do teto'+(over?' · estourou':'')+'</div>' +
+    '</div>';
+  }).join('');
+
+  const baldeInfo = { mercado:{cor:'#639922',nome:'Mercado'}, essencial:{cor:'#378ADD',nome:'Essencial'}, discricionario:{cor:'#D85A30',nome:'Discricionário'} };
+  const itens = [...d.itens].sort((a,b)=>b.v-a.v);
+  set('al-list-header', itens.length + ' lançamentos · ' + mesCurto);
+  document.getElementById('al-list').innerHTML = itens.map(t => {
+    const bi = baldeInfo[t.b];
+    return '<div class="receita-item">' +
+      '<div class="receita-icon" style="background:var(--surface2);color:'+bi.cor+';font-size:11px;font-weight:600;">'+t.d+'</div>' +
+      '<div class="receita-info"><div class="receita-nome">'+t.n+'</div><div class="receita-sub" style="color:'+bi.cor+';">'+bi.nome+'</div></div>' +
+      '<div class="receita-right"><div class="receita-valor">'+f(t.v)+'</div></div>' +
+    '</div>';
+  }).join('');
+
+  const note = document.getElementById('al-note');
+  if (note) note.innerHTML = '💡 ' + d.nota;
+
+  if (_alChart) _alChart.destroy();
+  _alChart = new Chart(document.getElementById('alChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Março','Abril','Maio','Junho*'],
+      datasets: [
+        { label:'Mercado', data:[691.47,243.94,106.41,226.09], backgroundColor:'#639922' },
+        { label:'Essencial', data:[528.00,245.88,157.90,49.90], backgroundColor:'#378ADD' },
+        { label:'Discricionário', data:[367.22,355.62,215.80,69.93], backgroundColor:'#D85A30' }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ color:'#8b8f9a', font:{size:11}, boxWidth:10, padding:8 } },
+        tooltip:{ callbacks:{ label: ctx => ctx.dataset.label + ': R$ ' + ctx.parsed.y.toLocaleString('pt-BR',{minimumFractionDigits:2}) } } },
+      scales:{ x:{ stacked:true, ticks:{color:'#8b8f9a',font:{size:11}}, grid:{display:false} },
+        y:{ stacked:true, ticks:{color:'#8b8f9a',font:{size:10},callback:v=>'R$'+v}, grid:{color:'#2a2d3533'} } }
+    }
+  });
+}
+
+function initAlimentacaoPage() { renderAlimentacao(selectedMonths.alimentacao || '2026-05'); }
+
 function switchPage(page, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -1498,6 +1733,9 @@ function switchPage(page, el) {
   }
   if (page === 'despesas-fixas') {
     initFixasPage();
+  }
+  if (page === 'alimentacao') {
+    initAlimentacaoPage();
   }
   if (page === 'projecao') {
     initProjecaoPage();
@@ -1795,7 +2033,7 @@ const monthNames = {
   '2026-07':'Julho 2026','2026-08':'Agosto 2026','2026-09':'Setembro 2026',
   '2026-10':'Outubro 2026','2026-11':'Novembro 2026','2026-12':'Dezembro 2026'
 };
-const selectedMonths = { visao: '2026-05', receitas: '2026-05', fixas: '2026-05', variaveis: '2026-05' };
+const selectedMonths = { visao: '2026-05', receitas: '2026-05', fixas: '2026-05', variaveis: '2026-05', alimentacao: '2026-05' };
 
 // ─── DADOS REAIS POR MÊS (Open Finance · conta corrente Nubank) ───────────────
 const monthlyData = {
@@ -1863,6 +2101,7 @@ function setMonthFilter(section, month, el) {
   if (section === 'receitas') renderReceitas(month);
   if (section === 'fixas') renderDespesasFixas(month);
   if (section === 'variaveis') renderDespesasVar(month);
+  if (section === 'alimentacao') renderAlimentacao(month);
 
   const note = document.getElementById(section + '-month-note');
   const d = monthlyData[month];
