@@ -188,6 +188,23 @@
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 99px; padding: 4px 12px;
   }
+
+  /* OBJETIVOS */
+  .obj-list { display: flex; flex-direction: column; gap: 12px; }
+  .obj-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 18px;
+  }
+  .obj-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .obj-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .obj-meta-val { font-size: 13px; font-weight: 600; color: var(--text2); }
+  .obj-desc { font-size: 13px; color: var(--text2); margin-top: 6px; }
+  .obj-need {
+    font-size: 12px; color: var(--text2); margin-top: 8px;
+    background: var(--surface2); border-radius: var(--radius-sm);
+    padding: 8px 12px; line-height: 1.5;
+  }
+  .obj-need strong { color: var(--text); }
   /* PROJEÇÃO */
   .proj-metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; position: relative; overflow: hidden; }
   .proj-metric::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
@@ -363,11 +380,12 @@
 
 <div class="nav-tabs">
   <button class="nav-tab active" onclick="switchPage('visao-geral', this)">📊 Visão Geral</button>
-  <button class="nav-tab" onclick="switchPage('receitas', this)">💰 Receitas Fixas</button>
+  <button class="nav-tab" onclick="switchPage('receitas', this)">💰 Receitas</button>
   <button class="nav-tab" onclick="switchPage('despesas-fixas', this)">📌 Despesas Fixas</button>
   <button class="nav-tab" onclick="switchPage('variaveis', this)">🔀 Despesas Variáveis</button>
   <button class="nav-tab" onclick="switchPage('projecao', this)">🔮 Projeção Próx. Mês</button>
   <button class="nav-tab" onclick="switchPage('comparativo', this)">📅 Comparativo</button>
+  <button class="nav-tab" onclick="switchPage('objetivos', this)">🎯 Objetivos</button>
 </div>
 
 <div id="page-visao-geral" class="page active">
@@ -526,43 +544,43 @@
   <!-- MÉTRICAS -->
   <div class="receitas-grid">
     <div class="receita-metric">
-      <div class="receita-metric-label">Total receitas fixas / mês</div>
-      <div class="receita-metric-value">R$ 9.163,65</div>
-      <div class="receita-metric-sub">2 fontes de renda recorrente</div>
+      <div class="receita-metric-label">Receitas fixas / mês</div>
+      <div class="receita-metric-value" style="color:var(--green);">R$ 9.163,65</div>
+      <div class="receita-metric-sub">2 fontes recorrentes</div>
     </div>
     <div class="receita-metric">
-      <div class="receita-metric-label">Pró-labore Wendell</div>
-      <div class="receita-metric-value">R$ 1.330,63</div>
-      <div class="receita-metric-sub">Transferência mensal recorrente</div>
+      <div class="receita-metric-label">Receitas variáveis / mês</div>
+      <div class="receita-metric-value" style="color:var(--gold);">R$ 2.686,20</div>
+      <div class="receita-metric-sub">Resgates e Pix eventuais</div>
     </div>
     <div class="receita-metric">
-      <div class="receita-metric-label">Pró-labore Francine</div>
-      <div class="receita-metric-value">R$ 7.833,02</div>
-      <div class="receita-metric-sub">D'Artibale Faria Advogados</div>
+      <div class="receita-metric-label">Total de receitas</div>
+      <div class="receita-metric-value" style="color:var(--blue);">R$ 11.849,85</div>
+      <div class="receita-metric-sub">Fixas + variáveis</div>
     </div>
     <div class="receita-metric">
-      <div class="receita-metric-label">Saldo fixo após despesas</div>
-      <div class="receita-metric-value" id="saldoFixoReceitas">—</div>
-      <div class="receita-metric-sub">Receitas fixas − despesas fixas</div>
+      <div class="receita-metric-label">% que é fixo</div>
+      <div class="receita-metric-value">77%</div>
+      <div class="receita-metric-sub">Renda previsível</div>
     </div>
   </div>
 
-  <!-- GRÁFICO -->
+  <!-- GRÁFICOS -->
   <div class="charts" style="margin-bottom:20px;">
     <div class="chart-card">
-      <div class="section-title">Distribuição das receitas fixas</div>
-      <div class="receita-chart-wrap"><canvas id="receitaDonut"></canvas></div>
+      <div class="section-title">Receitas fixas vs variáveis</div>
+      <div class="receita-chart-wrap"><canvas id="receitaCompDonut"></canvas></div>
     </div>
     <div class="chart-card">
-      <div class="section-title">Receitas fixas vs Despesas fixas</div>
-      <div class="receita-chart-wrap"><canvas id="receitaFlow"></canvas></div>
+      <div class="section-title">Comparativo por fonte</div>
+      <div class="receita-chart-wrap"><canvas id="receitaCompBar"></canvas></div>
     </div>
   </div>
 
   <!-- RECEITAS FIXAS -->
   <div class="receita-section-title">
-    <span>Fontes de renda fixas mensais</span>
-    <span style="color:var(--text);">R$ 9.163,65 / mês</span>
+    <span>🟢 Receitas fixas mensais</span>
+    <span style="color:var(--green);">R$ 9.163,65 / mês</span>
   </div>
   <div class="receita-list">
 
@@ -592,24 +610,71 @@
 
   </div>
 
-  <!-- TOTAL BAR -->
-  <div class="fixas-total-bar" style="margin-top:0;">
-    <div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Receitas fixas mensais</div>
-      <div style="font-size:22px;font-weight:700;color:var(--green);">R$ 9.163,65</div>
+  <!-- RECEITAS VARIÁVEIS -->
+  <div class="receita-section-title" style="margin-top:24px;">
+    <span>🟡 Receitas variáveis</span>
+    <span style="color:var(--gold);">R$ 2.686,20 em mai/26</span>
+  </div>
+  <div class="receita-list">
+
+    <div class="receita-item">
+      <div class="receita-icon" style="background:var(--gold-dim);">📈</div>
+      <div class="receita-info">
+        <div class="receita-nome">Resgates RDB <span class="receita-badge" style="background:var(--gold-dim);color:var(--gold);">eventual</span></div>
+        <div class="receita-sub">Resgates de reserva · valor varia conforme necessidade</div>
+      </div>
+      <div class="receita-right">
+        <div class="receita-valor">R$ 1.630,00</div>
+        <div class="receita-data">4 resgates em maio</div>
+      </div>
     </div>
-    <div style="text-align:right;">
-      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Despesas fixas mensais</div>
-      <div style="font-size:22px;font-weight:700;color:var(--red);">R$ 8.908,71</div>
+
+    <div class="receita-item">
+      <div class="receita-icon" style="background:var(--gold-dim);">💹</div>
+      <div class="receita-info">
+        <div class="receita-nome">Resgate Fundo Nu Reserva <span class="receita-badge" style="background:var(--gold-dim);color:var(--gold);">eventual</span></div>
+        <div class="receita-sub">Fundo Nu Reserva Imediata</div>
+      </div>
+      <div class="receita-right">
+        <div class="receita-valor">R$ 1.003,20</div>
+        <div class="receita-data">12/05</div>
+      </div>
+    </div>
+
+    <div class="receita-item">
+      <div class="receita-icon" style="background:var(--green-dim);">↙</div>
+      <div class="receita-info">
+        <div class="receita-nome">Pix recebido — Fernanda <span class="receita-badge" style="background:var(--gold-dim);color:var(--gold);">eventual</span></div>
+        <div class="receita-sub">Fernanda Pedrocchi Leal · Transferência</div>
+      </div>
+      <div class="receita-right">
+        <div class="receita-valor">R$ 53,00</div>
+        <div class="receita-data">23/05</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMPARATIVO BAR -->
+  <div class="fixas-total-bar" style="margin-top:24px;">
+    <div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Receitas fixas</div>
+      <div style="font-size:22px;font-weight:700;color:var(--green);">R$ 9.163,65</div>
+      <div style="font-size:11px;color:var(--text3);">77% do total</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Receitas variáveis</div>
+      <div style="font-size:22px;font-weight:700;color:var(--gold);">R$ 2.686,20</div>
+      <div style="font-size:11px;color:var(--text3);">23% do total</div>
     </div>
     <div style="text-align:right;border-left:1px solid var(--border);padding-left:16px;">
-      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Sobra mensal</div>
-      <div style="font-size:22px;font-weight:700;color:var(--blue);">R$ 254,94</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Total recebido (mai)</div>
+      <div style="font-size:22px;font-weight:700;color:var(--blue);">R$ 11.849,85</div>
     </div>
   </div>
 
-  <div style="background:var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:13px;color:var(--gold);margin-top:12px;margin-bottom:20px;">
-    ⚠️ <strong>Atenção:</strong> As receitas fixas cobrem as despesas fixas com uma margem pequena de R$ 254,94. Receitas eventuais (como o Pix de R$ 21.994 em maio) complementam o orçamento.
+  <div style="background:var(--blue-dim);border-left:3px solid var(--blue);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:13px;color:var(--blue);margin-top:12px;margin-bottom:20px;">
+    💡 <strong>Saúde da renda:</strong> 77% da receita vem de fontes fixas e previsíveis — um bom indicador de estabilidade. As receitas variáveis (resgates) são reservas sendo usadas, não renda nova; o ideal é que ao longo do tempo a renda variável venha de novas fontes (consultoria, investimentos) e não de resgates.
   </div>
 
 </div><!-- fim page receitas -->
@@ -1030,6 +1095,119 @@
 </div><!-- fim page variaveis -->
 
 
+<div id="page-objetivos" class="page">
+
+  <!-- RESUMO -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px;">
+    <div class="receita-metric">
+      <div class="receita-metric-label">Capacidade de poupança</div>
+      <div class="receita-metric-value" style="color:var(--blue);">R$ 254,94</div>
+      <div class="receita-metric-sub">Sobra mensal atual (fixo)</div>
+    </div>
+    <div class="receita-metric">
+      <div class="receita-metric-label">Metas ativas</div>
+      <div class="receita-metric-value">5</div>
+      <div class="receita-metric-sub">Curto, médio e longo prazo</div>
+    </div>
+    <div class="receita-metric">
+      <div class="receita-metric-label">Total das metas</div>
+      <div class="receita-metric-value" style="color:var(--gold);">R$ 320 mil</div>
+      <div class="receita-metric-sub">Soma dos objetivos</div>
+    </div>
+    <div class="receita-metric">
+      <div class="receita-metric-label">Já conquistado</div>
+      <div class="receita-metric-value" style="color:var(--green);">R$ 12 mil</div>
+      <div class="receita-metric-sub">Reserva acumulada</div>
+    </div>
+  </div>
+
+  <!-- CURTO PRAZO -->
+  <div class="receita-section-title">
+    <span>🟢 Curto prazo · até 12 meses</span>
+  </div>
+  <div class="obj-list">
+
+    <div class="obj-card">
+      <div class="obj-head">
+        <div class="obj-title">🛟 Reserva de emergência</div>
+        <div class="obj-meta-val">R$ 12.000 / R$ 30.000</div>
+      </div>
+      <div class="obj-desc">Acumular 6 meses de despesas fixas (~R$ 5 mil/mês) para imprevistos.</div>
+      <div class="progress-bg" style="margin:8px 0;"><div class="progress-fill" style="width:40%;background:var(--green);"></div></div>
+      <div class="obj-need"><strong>Para alcançar:</strong> guardar R$ 1.500/mês por 12 meses. Direcionar resgates de RDB para esta reserva ao invés de gastos.</div>
+    </div>
+
+    <div class="obj-card">
+      <div class="obj-head">
+        <div class="obj-title">✈️ Viagem em família</div>
+        <div class="obj-meta-val">R$ 1.500 / R$ 8.000</div>
+      </div>
+      <div class="obj-desc">Férias planejadas para o fim do ano.</div>
+      <div class="progress-bg" style="margin:8px 0;"><div class="progress-fill" style="width:19%;background:var(--green);"></div></div>
+      <div class="obj-need"><strong>Para alcançar:</strong> separar R$ 650/mês em conta específica. Usar parte do 13º/honorários extras.</div>
+    </div>
+
+  </div>
+
+  <!-- MÉDIO PRAZO -->
+  <div class="receita-section-title" style="margin-top:24px;">
+    <span>🟡 Médio prazo · 1 a 5 anos</span>
+  </div>
+  <div class="obj-list">
+
+    <div class="obj-card">
+      <div class="obj-head">
+        <div class="obj-title">🚗 Troca de carro</div>
+        <div class="obj-meta-val">R$ 0 / R$ 60.000</div>
+      </div>
+      <div class="obj-desc">Usar o consórcio Bradesco (já em andamento) como carta de crédito.</div>
+      <div class="progress-bg" style="margin:8px 0;"><div class="progress-fill" style="width:8%;background:var(--gold);"></div></div>
+      <div class="obj-need"><strong>Para alcançar:</strong> manter o consórcio em dia (R$ 718/mês). Acompanhar assembleias para lance. Reservar valor para lance e antecipar contemplação.</div>
+    </div>
+
+    <div class="obj-card">
+      <div class="obj-head">
+        <div class="obj-title">🏠 Quitar financiamento da casa</div>
+        <div class="obj-meta-val">em andamento</div>
+      </div>
+      <div class="obj-desc">Amortizar o financiamento (Caixa · R$ 695/mês) para reduzir prazo e juros.</div>
+      <div class="progress-bg" style="margin:8px 0;"><div class="progress-fill" style="width:25%;background:var(--gold);"></div></div>
+      <div class="obj-need"><strong>Para alcançar:</strong> usar receitas extras para amortização anual. Cada amortização reduz juros futuros. Revisar saldo devedor a cada 6 meses.</div>
+    </div>
+
+  </div>
+
+  <!-- LONGO PRAZO -->
+  <div class="receita-section-title" style="margin-top:24px;">
+    <span>🔵 Longo prazo · mais de 5 anos</span>
+  </div>
+  <div class="obj-list">
+
+    <div class="obj-card">
+      <div class="obj-head">
+        <div class="obj-title">📊 Independência financeira</div>
+        <div class="obj-meta-val">R$ 0 / R$ 200.000</div>
+      </div>
+      <div class="obj-desc">Construir patrimônio em investimentos (FIIs, renda fixa) que gere renda passiva.</div>
+      <div class="progress-bg" style="margin:8px 0;"><div class="progress-fill" style="width:3%;background:var(--blue);"></div></div>
+      <div class="obj-need"><strong>Para alcançar:</strong> investir R$ 1.000+/mês de forma consistente. Diversificar fontes de renda para aumentar a capacidade de aporte. Reinvestir dividendos.</div>
+    </div>
+
+  </div>
+
+  <div style="background:var(--green-dim);border-left:3px solid var(--green);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:12px 16px;font-size:13px;color:var(--green);margin-top:24px;margin-bottom:20px;">
+    🎯 <strong>Próximo passo recomendado:</strong> A maior alavanca para todas as metas é aumentar a sobra mensal (hoje R$ 255). Isso vem de dois lados — reduzir despesas variáveis (fatura do cartão) e diversificar a renda. Cada R$ 500 a mais por mês acelera todas as metas simultaneamente.
+  </div>
+
+  <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+    <button onclick="sendPrompt('Como posso aumentar minha sobra mensal de R$ 255 para R$ 1.000?')">Como poupar mais ↗</button>
+    <button onclick="sendPrompt('Faça um plano de 12 meses para minha reserva de emergência')">Plano da reserva ↗</button>
+    <button onclick="sendPrompt('Quais investimentos combinam com minhas metas de longo prazo?')">Sugestões de investimento ↗</button>
+  </div>
+
+</div><!-- fim page objetivos -->
+
+
 <div class="footer" id="footer">Atualizado automaticamente via Open Finance · Nubank · Família Guimarães</div>
 
 <script>
@@ -1153,46 +1331,42 @@ const historico = {
 
 // ─── GRÁFICOS RECEITAS ───────────────────────────────────────────────────────
 function initReceitaCharts() {
-  // Donut receitas fixas
-  new Chart(document.getElementById('receitaDonut'), {
+  // Donut: fixas vs variáveis
+  new Chart(document.getElementById('receitaCompDonut'), {
     type: 'doughnut',
     data: {
-      labels: ['Pró-labore Francine', 'Pró-labore Wendell'],
-      datasets: [{ data: [7833.02, 1330.63], backgroundColor: ['#16a34a','#2563eb'], borderWidth: 0, hoverOffset: 6 }]
+      labels: ['Receitas fixas', 'Receitas variáveis'],
+      datasets: [{ data: [9163.65, 2686.20], backgroundColor: ['#4dbb8a','#e8c468'], borderWidth: 0, hoverOffset: 6 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false, cutout: '65%',
       plugins: {
-        legend: { position: 'right', labels: { color: '#6b7280', font: { size: 11 }, boxWidth: 10, padding: 10 } },
+        legend: { position: 'right', labels: { color: '#8b8f9a', font: { size: 11 }, boxWidth: 10, padding: 10 } },
         tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.toLocaleString('pt-BR', {minimumFractionDigits:2}) } }
       }
     }
   });
 
-  // Receitas fixas vs Despesas fixas
-  new Chart(document.getElementById('receitaFlow'), {
+  // Barra: comparativo por fonte
+  new Chart(document.getElementById('receitaCompBar'), {
     type: 'bar',
     data: {
-      labels: ['Pró-labore\nFrancine', 'Pró-labore\nWendell', 'Total\nReceitas', 'Despesas\nFixas'],
+      labels: ['Pró-labore\nFrancine', 'Pró-labore\nWendell', 'Resgates\nRDB', 'Fundo Nu', 'Pix\nFernanda'],
       datasets: [
-        { label: 'Valor', data: [7833.02, 1330.63, 9163.65, 8908.71],
-          backgroundColor: ['#16a34a88','#2563eb88','#16a34a','#dc262688'],
-          borderColor: ['#16a34a','#2563eb','#16a34a','#dc2626'], borderWidth: 1 }
+        { label: 'Valor', data: [7833.02, 1330.63, 1630.00, 1003.20, 53.00],
+          backgroundColor: ['#4dbb8a','#4dbb8a','#e8c468','#e8c468','#e8c468'],
+          borderWidth: 0 }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits:2}) } } },
       scales: {
-        x: { ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { color: '#e2e4ec44' } },
-        y: { ticks: { color: '#9ca3af', font: { size: 10 }, callback: v => 'R$' + (v/1000).toFixed(1) + 'k' }, grid: { color: '#e2e4ec44' } }
+        x: { ticks: { color: '#8b8f9a', font: { size: 10 } }, grid: { color: '#2a2d3533' } },
+        y: { ticks: { color: '#8b8f9a', font: { size: 10 }, callback: v => 'R$' + (v/1000).toFixed(1) + 'k' }, grid: { color: '#2a2d3533' } }
       }
     }
   });
-
-  // Preencher saldo fixo
-  const saldoEl = document.getElementById('saldoFixoReceitas');
-  if (saldoEl) { saldoEl.textContent = 'R$ 254,94'; saldoEl.style.color = '#2563eb'; }
 }
 
 // Inicializa gráficos de receita quando a aba for clicada
