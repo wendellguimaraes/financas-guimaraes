@@ -626,164 +626,44 @@
   </div>
   <div id="fixas-month-note" style="display:none;background:var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:12px;color:var(--gold);margin-bottom:16px;"></div>
 
-  <div class="fixas-grid">
-
-    <!-- COLUNA 1: PIX / BOLETO -->
-    <div class="fixas-card">
-      <div class="fixas-card-header">
-        <div class="fixas-card-title">🏦 Pix e Boleto</div>
-        <span class="fixas-card-total" style="color:var(--red);">R$ 3.054,28</span>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--red-dim);">💊</div>
-        <div class="fixas-info"><div class="fixas-nome">Unimed SJ Rio Preto</div><div class="fixas-cat">Plano de saúde <span class="fixas-badge boleto">boleto</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 728,87</div><div class="fixas-vcto">vence dia 6</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--blue-dim);">🏠</div>
-        <div class="fixas-info"><div class="fixas-nome">Condomínio R P da L VI</div><div class="fixas-cat">Moradia <span class="fixas-badge boleto">boleto</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 270,00</div><div class="fixas-vcto">vence dia 8</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--gold-dim);">⚡</div>
-        <div class="fixas-info"><div class="fixas-nome">CPFL — Energia elétrica</div><div class="fixas-cat">Utilidade <span class="fixas-badge boleto">boleto</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 233,85</div><div class="fixas-vcto">vence dia 8</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--blue-dim);">📡</div>
-        <div class="fixas-info"><div class="fixas-nome">AW Internet</div><div class="fixas-cat">Internet <span class="fixas-badge boleto">boleto</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 79,90</div><div class="fixas-vcto">vence dia 8</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--blue-dim);">🚗</div>
-        <div class="fixas-info"><div class="fixas-nome">Bradesco Consórcio</div><div class="fixas-cat">Consórcio <span class="fixas-badge boleto">boleto</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 718,08</div><div class="fixas-vcto">vence dia 8</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--gold-dim);">🔧</div>
-        <div class="fixas-info"><div class="fixas-nome">G Angelo Gasques ME</div><div class="fixas-cat">Manutenção <span class="fixas-badge pix">pix</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 190,00</div><div class="fixas-vcto">vence dia 8</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--gold-dim);">🏛️</div>
-        <div class="fixas-info"><div class="fixas-nome">Prefeitura — IPTU</div><div class="fixas-cat">Impostos <span class="fixas-badge boleto">boleto</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 54,58</div><div class="fixas-vcto">vence dia 8</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--green-dim);">🏠</div>
-        <div class="fixas-info"><div class="fixas-nome">Financiamento Casa</div><div class="fixas-cat">Moradia · Caixa <span class="fixas-badge pix">pix</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 695,00</div><div class="fixas-vcto">vence dia 8</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--blue-dim);">📱</div>
-        <div class="fixas-info"><div class="fixas-nome">Vivo — Telefone</div><div class="fixas-cat">Telefonia <span class="fixas-badge boleto">boleto</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 55,00</div><div class="fixas-vcto">vence dia 11</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--blue-dim);">💧</div>
-        <div class="fixas-info"><div class="fixas-nome">SEMAE — Água e esgoto</div><div class="fixas-cat">Utilidade <span class="fixas-badge boleto">boleto</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 25,00</div><div class="fixas-vcto">vence dia 12</div></div>
-      </div>
-
-      <div class="fixas-total-bar">
-        <span class="fixas-total-label">Total Pix / Boleto</span>
-        <span class="fixas-total-val" style="color:var(--red);">R$ 3.054,28</span>
-      </div>
+  <!-- MÉTRICAS DINÂMICAS -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px;">
+    <div class="var-metric">
+      <div class="var-metric-label">Total fixo no mês</div>
+      <div class="var-metric-value" id="df-total" style="color:var(--red);">—</div>
+      <div class="var-metric-sub" id="df-total-sub">—</div>
     </div>
-
-    <!-- COLUNA 2: CARTÃO -->
-    <div class="fixas-card">
-      <div class="fixas-card-header">
-        <div class="fixas-card-title">💳 Cartão de Crédito</div>
-        <span class="fixas-card-total" style="color:var(--red);">R$ 3.148,62</span>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--gold-dim);">⛽</div>
-        <div class="fixas-info"><div class="fixas-nome">Combustível</div><div class="fixas-cat">Petrobras Premmia · ~7x/mês <span class="fixas-badge cartao">cartão</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">~R$ 997,39</div><div class="fixas-vcto">mensal</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--red-dim);">💊</div>
-        <div class="fixas-info"><div class="fixas-nome">Farmácias</div><div class="fixas-cat">Raia, Wladimir, Drogaria <span class="fixas-badge cartao">cartão</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">~R$ 1.179,30</div><div class="fixas-vcto">mensal</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--green-dim);">🍽️</div>
-        <div class="fixas-info"><div class="fixas-nome">Restaurantes</div><div class="fixas-cat">Lanchonete Calcadão e outros <span class="fixas-badge cartao">cartão</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">~R$ 556,93</div><div class="fixas-vcto">mensal</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--blue-dim);">🍎</div>
-        <div class="fixas-info">
-          <div class="fixas-nome">Apple.Com/Bill <span style="font-size:10px;color:var(--gold);font-weight:600;">⚠ verificar 2x</span></div>
-          <div class="fixas-cat">Assinatura digital <span class="fixas-badge cartao">cartão</span></div>
-        </div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 19,90</div><div class="fixas-vcto">mensal</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--blue-dim);">☁️</div>
-        <div class="fixas-info"><div class="fixas-nome">Google One</div><div class="fixas-cat">Armazenamento <span class="fixas-badge cartao">cartão</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 12,50</div><div class="fixas-vcto">mensal</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--blue-dim);">💻</div>
-        <div class="fixas-info"><div class="fixas-nome">Pg *B4a Servicos de Te</div><div class="fixas-cat">Serviço digital · 12x <span class="fixas-badge cartao">cartão</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 64,90</div><div class="fixas-vcto">mensal</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--blue-dim);">🖥️</div>
-        <div class="fixas-info"><div class="fixas-nome">Automarticles</div><div class="fixas-cat">Serviço digital <span class="fixas-badge cartao">cartão</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">~R$ 258,60</div><div class="fixas-vcto">mensal</div></div>
-      </div>
-
-      <div class="fixas-item">
-        <div class="fixas-icon" style="background:var(--blue-dim);">📱</div>
-        <div class="fixas-info"><div class="fixas-nome">Conta Vivo (cartão)</div><div class="fixas-cat">Telefonia <span class="fixas-badge cartao">cartão</span></div></div>
-        <div class="fixas-right"><div class="fixas-valor">R$ 59,00</div><div class="fixas-vcto">mensal</div></div>
-      </div>
-
-      <div class="fixas-total-bar">
-        <span class="fixas-total-label">Total Cartão</span>
-        <span class="fixas-total-val" style="color:var(--red);">~R$ 3.148,62</span>
-      </div>
+    <div class="var-metric">
+      <div class="var-metric-label">Nº de contas fixas</div>
+      <div class="var-metric-value" id="df-count">—</div>
+      <div class="var-metric-sub">Recorrentes no mês</div>
     </div>
-
+    <div class="var-metric">
+      <div class="var-metric-label">Maior despesa fixa</div>
+      <div class="var-metric-value" id="df-top" style="color:var(--red);">—</div>
+      <div class="var-metric-sub" id="df-top-sub">—</div>
+    </div>
+    <div class="var-metric">
+      <div class="var-metric-label">Média mensal (4 meses)</div>
+      <div class="var-metric-value" style="color:var(--text2);">R$ 2.491</div>
+      <div class="var-metric-sub">Mar–Jun</div>
+    </div>
   </div>
 
-  <!-- TOTAL GERAL -->
+  <!-- GRÁFICO -->
   <div class="chart-card" style="margin-bottom:20px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <div>
-        <div style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Resumo mensal de despesas fixas</div>
-        <div style="display:flex;gap:24px;flex-wrap:wrap;">
-          <div><div style="font-size:11px;color:var(--text3);">Pix / Boleto</div><div style="font-size:16px;font-weight:600;color:var(--red);">R$ 3.054,28</div></div>
-          <div><div style="font-size:11px;color:var(--text3);">Cartão</div><div style="font-size:16px;font-weight:600;color:var(--red);">~R$ 3.148,62</div></div>
-          <div><div style="font-size:11px;color:var(--text3);">Fatura variável</div><div style="font-size:16px;font-weight:600;color:var(--text2);">~R$ 2.705,81</div></div>
-        </div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Total mensal estimado</div>
-        <div style="font-size:26px;font-weight:700;color:var(--red);">~R$ 8.908,71</div>
-      </div>
-    </div>
+    <div class="section-title">Despesas fixas por categoria</div>
+    <div style="position:relative;height:240px;"><canvas id="dfChart"></canvas></div>
   </div>
+
+  <!-- LISTA -->
+  <div class="receita-section-title">
+    <span>📌 Despesas fixas do mês</span>
+    <span id="df-header" style="color:var(--red);">—</span>
+  </div>
+  <div class="receita-list" id="df-list"></div>
+
+  <div id="df-note" style="background:var(--blue-dim);border-left:3px solid var(--blue);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:13px;color:var(--blue);margin-top:16px;margin-bottom:20px;"></div>
 
 </div><!-- fim page despesas-fixas -->
 
@@ -973,58 +853,44 @@
   </div>
   <div id="variaveis-month-note" style="display:none;background:var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:12px;color:var(--gold);margin-bottom:16px;"></div>
 
-  <!-- MÉTRICAS -->
+  <!-- MÉTRICAS DINÂMICAS -->
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px;">
     <div class="var-metric">
-      <div class="var-metric-label">Fatura aberta (jun)</div>
-      <div class="var-metric-value">R$ 9.224,15</div>
-      <div class="var-metric-sub">Vence 18/06/2026</div>
+      <div class="var-metric-label">Total variável no mês</div>
+      <div class="var-metric-value" id="dv-total" style="color:var(--purple);">—</div>
+      <div class="var-metric-sub" id="dv-total-sub">—</div>
     </div>
     <div class="var-metric">
-      <div class="var-metric-label">Lançamentos novos</div>
-      <div class="var-metric-value">R$ 1.214,95</div>
-      <div class="var-metric-sub">17 compras desde 19/05</div>
+      <div class="var-metric-label">Nº de lançamentos</div>
+      <div class="var-metric-value" id="dv-count">—</div>
+      <div class="var-metric-sub">Gastos não recorrentes</div>
     </div>
     <div class="var-metric">
       <div class="var-metric-label">Maior gasto variável</div>
-      <div class="var-metric-value">R$ 479,46</div>
-      <div class="var-metric-sub">Farmácia — Drogaria Santa Terez</div>
+      <div class="var-metric-value" id="dv-top" style="color:var(--purple);">—</div>
+      <div class="var-metric-sub" id="dv-top-sub">—</div>
     </div>
     <div class="var-metric">
-      <div class="var-metric-label">Dias para fechar</div>
-      <div class="var-metric-value" id="diasFecha">—</div>
-      <div class="var-metric-sub">Até 18/06/2026</div>
+      <div class="var-metric-label">% do total de saídas</div>
+      <div class="var-metric-value" id="dv-pct">—</div>
+      <div class="var-metric-sub">Variável vs total do mês</div>
     </div>
   </div>
 
   <!-- GRÁFICO -->
-  <div class="charts" style="margin-bottom:20px;">
-    <div class="chart-card">
-      <div class="section-title">Distribuição por categoria</div>
-      <div style="position:relative;height:220px;"><canvas id="varDonut"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="section-title">Evolução dos gastos variáveis (mai → jun)</div>
-      <div style="position:relative;height:220px;"><canvas id="varFlow"></canvas></div>
-    </div>
+  <div class="chart-card" style="margin-bottom:20px;">
+    <div class="section-title">Despesas variáveis do mês</div>
+    <div style="position:relative;height:260px;"><canvas id="dvChart"></canvas></div>
   </div>
 
-  <!-- LISTA POR CATEGORIA -->
-  <div class="section-title" style="margin-bottom:12px;">
-    <span>Lançamentos por categoria — fatura aberta jun/2026</span>
-    <span style="color:var(--text3);">17 registros</span>
+  <!-- LISTA -->
+  <div class="receita-section-title">
+    <span>🔀 Despesas variáveis do mês</span>
+    <span id="dv-header" style="color:var(--purple);">—</span>
   </div>
+  <div class="receita-list" id="dv-list"></div>
 
-  <div id="varCats"></div>
-
-  <div class="var-alerta">
-    ⚠️ <strong>Atenção:</strong> Faltam ~20 dias para o ciclo fechar em 18/06. Com o ritmo atual de R$ 121/dia, a fatura pode chegar a <strong>R$ 11.600+</strong> ao fechar. Considere reduzir gastos variáveis nas próximas semanas.
-  </div>
-
-  <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
-    <button onclick="sendPrompt('Quais parcelamentos chegam na fatura de junho?')">Parcelamentos em junho ↗</button>
-    <button onclick="sendPrompt('Faça uma projeção da fatura de junho com base no ritmo atual')">Projeção fatura junho ↗</button>
-  </div>
+  <div id="dv-note" class="var-alerta"></div>
 
 </div><!-- fim page variaveis -->
 
@@ -1452,153 +1318,171 @@ function initProjecaoPage() {
 }
 
 // ─── DESPESAS VARIÁVEIS ──────────────────────────────────────────────────────
-function initVariaveisPage() {
-  // Dias para fechar
-  const hoje = new Date();
-  const venc = new Date('2026-06-18');
-  const dias = Math.ceil((venc - hoje) / (1000*60*60*24));
-  const el = document.getElementById('diasFecha');
-  if (el) el.textContent = dias + ' dias';
+// ─── DADOS DE DESPESAS POR MÊS (Open Finance · classificação manual) ──────────
+const despFixasData = {
+  '2026-03': { items:[
+    {nome:'Unimed',sub:'Plano de saúde',valor:519.23,emoji:'💊'},
+    {nome:'Consórcio Bradesco',sub:'Consórcio veículo',valor:683.42,emoji:'🚗'},
+    {nome:'Condomínio',sub:'Moradia',valor:270.00,emoji:'🏠'},
+    {nome:'G Angelo (Hidronat)',sub:'Mensalidade',valor:190.00,emoji:'🏊'},
+    {nome:'AW Internet',sub:'Internet',valor:79.90,emoji:'📡'},
+    {nome:'IPTU Prefeitura',sub:'Imposto',valor:54.58,emoji:'🏛️'},
+  ], nota:'Março sem financiamento Caixa lançado na conta e sem CPFL/SEMAE no extrato — total fixo menor.' },
+  '2026-04': { items:[
+    {nome:'Caixa — Financiamento',sub:'Habitação',valor:697.46,emoji:'🏠'},
+    {nome:'Unimed',sub:'Plano de saúde',valor:643.62,emoji:'💊'},
+    {nome:'Consórcio Bradesco',sub:'Consórcio veículo',valor:683.42,emoji:'🚗'},
+    {nome:'Condomínio',sub:'Moradia',valor:270.00,emoji:'🏠'},
+    {nome:'G Angelo (Hidronat)',sub:'Mensalidade',valor:190.00,emoji:'🏊'},
+    {nome:'AW Internet',sub:'Internet',valor:79.90,emoji:'📡'},
+    {nome:'VIVO Telefone',sub:'Telefonia',valor:55.00,emoji:'📱'},
+    {nome:'IPTU Prefeitura',sub:'Imposto',valor:54.58,emoji:'🏛️'},
+  ], nota:'Abril já mostra o financiamento da Caixa (R$ 697) — paga via boleto, por isso não aparecia no extrato de maio.' },
+  '2026-05': { items:[
+    {nome:'Unimed',sub:'Plano de saúde',valor:728.87,emoji:'💊'},
+    {nome:'Consórcio Bradesco',sub:'Consórcio veículo',valor:718.08,emoji:'🚗'},
+    {nome:'Caixa — Financiamento',sub:'Habitação (via Pix)',valor:695.00,emoji:'🏠'},
+    {nome:'Condomínio',sub:'Moradia',valor:270.00,emoji:'🏠'},
+    {nome:'CPFL Energia',sub:'Energia elétrica',valor:233.85,emoji:'⚡'},
+    {nome:'G Angelo (Hidronat)',sub:'Mensalidade',valor:190.00,emoji:'🏊'},
+    {nome:'AW Internet',sub:'Internet',valor:79.90,emoji:'📡'},
+    {nome:'VIVO Telefone',sub:'Telefonia',valor:55.00,emoji:'📱'},
+    {nome:'IPTU Prefeitura',sub:'Imposto',valor:54.58,emoji:'🏛️'},
+    {nome:'SEMAE Água',sub:'Água e esgoto',valor:25.00,emoji:'💧'},
+  ], nota:'Maio é o mês mais completo: todas as fixas apareceram, incluindo CPFL, SEMAE e financiamento via Pix.' },
+  '2026-06': { items:[
+    {nome:'Unimed',sub:'Plano de saúde',valor:1110.09,emoji:'💊'},
+    {nome:'Consórcio Bradesco',sub:'Consórcio veículo',valor:737.58,emoji:'🚗'},
+    {nome:'Condomínio',sub:'Moradia',valor:270.00,emoji:'🏠'},
+    {nome:'G Angelo (Hidronat)',sub:'Mensalidade',valor:190.00,emoji:'🏊'},
+    {nome:'AW Internet',sub:'Internet',valor:79.90,emoji:'📡'},
+    {nome:'IPTU Prefeitura',sub:'Imposto',valor:54.58,emoji:'🏛️'},
+  ], nota:'Junho (parcial até 10/06): Unimed veio mais alta (R$ 1.110). CPFL, SEMAE e financiamento ainda não lançados no período.' },
+};
 
-  const txs = [
-    { date:'28/05', desc:'NuTag (pedágio)', val:8.64,   cat:'Transporte',  emoji:'🚗' },
-    { date:'28/05', desc:'NuTag (pedágio)', val:8.64,   cat:'Transporte',  emoji:'🚗' },
-    { date:'28/05', desc:'NuTag (pedágio)', val:11.02,  cat:'Transporte',  emoji:'🚗' },
-    { date:'27/05', desc:'Drogaria Santa Terez', val:47.98, cat:'Farmácia', emoji:'💊' },
-    { date:'27/05', desc:'Juscelino Sjrp', val:27.10,   cat:'Mercado',     emoji:'🛒' },
-    { date:'26/05', desc:'Lanchonete Calcadão', val:17.00, cat:'Restaurante', emoji:'🍽️' },
-    { date:'24/05', desc:'Petrobras Premmia', val:116.30, cat:'Combustível', emoji:'⛽' },
-    { date:'22/05', desc:'Farmácia Economize', val:19.95, cat:'Farmácia',  emoji:'💊' },
-    { date:'22/05', desc:'Farmácia Economize', val:41.98, cat:'Farmácia',  emoji:'💊' },
-    { date:'22/05', desc:'Café Conchego', val:28.00,    cat:'Restaurante', emoji:'🍽️' },
-    { date:'22/05', desc:'Frutalle', val:18.42,          cat:'Restaurante', emoji:'🍽️' },
-    { date:'22/05', desc:'Ec *Petrobrasprem', val:137.75, cat:'Combustível', emoji:'⛽' },
-    { date:'22/05', desc:'Gaviolli Eletricidade 1/4', val:222.72, cat:'Veículo', emoji:'🔧' },
-    { date:'21/05', desc:'Drogaria Santa Terez', val:431.48, cat:'Farmácia', emoji:'💊' },
-    { date:'20/05', desc:'Ternero Atelie de Cost', val:50.00, cat:'Vestuário', emoji:'👗' },
-    { date:'20/05', desc:'Autopostoplazario', val:9.97,   cat:'Combustível', emoji:'⛽' },
-    { date:'20/05', desc:'Lanchonete Calcadão', val:17.00, cat:'Restaurante', emoji:'🍽️' },
-  ];
+const despVarData = {
+  '2026-03': { items:[
+    {nome:'Fatura cartão',sub:'Pagamento de fatura',valor:8293.17,emoji:'💳'},
+    {nome:'Pix — Nathalia Pedrocchi',sub:'Transferência',valor:4064.04,emoji:'↗'},
+    {nome:'Detran',sub:'Débito veículo',valor:800.33,emoji:'🚘'},
+    {nome:'Convênios diversos',sub:'Pagamentos avulsos',valor:166.08,emoji:'🧾'},
+    {nome:'Pix — Miriam Damasceno',sub:'Transferência',valor:21.42,emoji:'↗'},
+    {nome:"Taxa D'Artibale",sub:'Pix',valor:25.00,emoji:'↗'},
+  ], nota:'Março: fatura do cartão (R$ 8.293) e Pix de R$ 4.064 para Nathalia dominaram os gastos variáveis.' },
+  '2026-04': { items:[
+    {nome:'Fatura cartão',sub:'Pagamento de fatura',valor:8277.41,emoji:'💳'},
+    {nome:'Detran',sub:'Débito veículo',valor:800.33,emoji:'🚘'},
+    {nome:'Pix — Wendell',sub:'Transferência',valor:680.00,emoji:'↗'},
+    {nome:'Convênios diversos',sub:'Pagamentos avulsos',valor:231.00,emoji:'🧾'},
+    {nome:'Pix — Fernanda',sub:'Transferência',valor:200.00,emoji:'↗'},
+    {nome:'Pix — Ana Paula',sub:'Transferência',valor:120.00,emoji:'↗'},
+    {nome:'Pix — Maria Carolina',sub:'Transferência',valor:10.00,emoji:'↗'},
+  ], nota:'Abril: gasto variável quase todo na fatura do cartão (R$ 8.277) e no Detran.' },
+  '2026-05': { items:[
+    {nome:'Fatura cartão',sub:'Pagamento de fatura',valor:5794.43,emoji:'💳'},
+    {nome:'Pix — Francine',sub:'Transferência própria',valor:3000.00,emoji:'↗'},
+    {nome:'Pix — Nathalia Pedrocchi',sub:'Transferência',valor:2709.36,emoji:'↗'},
+    {nome:'Detran',sub:'Débito veículo',valor:800.33,emoji:'🚘'},
+    {nome:'Clínica JIM Ming',sub:'Saúde · débito',valor:579.00,emoji:'🏥'},
+    {nome:'Pix — Fernanda',sub:'Transferências (3x)',valor:692.00,emoji:'↗'},
+    {nome:'Pix — Erika',sub:'Transferência',valor:32.00,emoji:'↗'},
+    {nome:'Pix — Jessica',sub:'Transferência',valor:8.30,emoji:'↗'},
+  ], nota:'Maio: além da fatura (R$ 5.794), dois Pix grandes para Francine (R$ 3.000) e Nathalia (R$ 2.709).' },
+  '2026-06': { items:[
+    {nome:'Pix — Claudio Pessoa',sub:'Transferência',valor:4000.00,emoji:'↗'},
+    {nome:'Clínica Boscaini',sub:'Estética · Pix',valor:2700.00,emoji:'🏥'},
+    {nome:'Pix — Nathalia Pedrocchi',sub:'Transferência',valor:1354.68,emoji:'↗'},
+    {nome:'Pix — Wendell',sub:'Transferência',valor:681.00,emoji:'↗'},
+    {nome:'FGV — Curso',sub:'Educação',valor:404.31,emoji:'🎓'},
+    {nome:'Convênios diversos',sub:'Pagamentos avulsos',valor:113.73,emoji:'🧾'},
+  ], nota:'Junho (parcial): Pix de R$ 4.000 para Claudio e R$ 2.700 para clínica de estética puxaram o variável.' },
+};
 
-  const catColors = {
-    'Farmácia':    { bg:'#FAECE7', cor:'#E24B4A' },
-    'Combustível': { bg:'#FAEEDA', cor:'#EF9F27' },
-    'Restaurante': { bg:'#E1F5EE', cor:'#1D9E75' },
-    'Mercado':     { bg:'#EAF3DE', cor:'#639922' },
-    'Transporte':  { bg:'#E6F1FB', cor:'#378ADD' },
-    'Veículo':     { bg:'#EEEDFE', cor:'#7F77DD' },
-    'Vestuário':   { bg:'#FBEAF0', cor:'#E47BAE' },
-  };
+let _dfChart = null, _dvChart = null;
 
-  // Agrupar por categoria
-  const groups = {};
-  txs.forEach(t => {
-    if (!groups[t.cat]) groups[t.cat] = [];
-    groups[t.cat].push(t);
+function renderDespesasFixas(month) {
+  const d = despFixasData[month] || despFixasData['2026-05'];
+  const items = [...d.items].sort((a,b)=>b.valor-a.valor);
+  const total = items.reduce((s,x)=>s+x.valor,0);
+  const top = items[0];
+  const mes = (monthNames[month] || month);
+  const mesCurto = mes.slice(0,3).toLowerCase() + '/' + month.slice(2,4);
+  const f = v => 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  const set = (id,v)=>{ const e=document.getElementById(id); if(e) e.textContent=v; };
+
+  set('df-total', f(total));
+  set('df-total-sub', mesCurto);
+  set('df-count', items.length);
+  set('df-top', f(top.valor));
+  set('df-top-sub', top.nome);
+  set('df-header', f(total) + ' em ' + mesCurto);
+
+  document.getElementById('df-list').innerHTML = items.map(x =>
+    '<div class="receita-item">' +
+      '<div class="receita-icon" style="background:var(--red-dim);">'+x.emoji+'</div>' +
+      '<div class="receita-info"><div class="receita-nome">'+x.nome+'</div><div class="receita-sub">'+x.sub+'</div></div>' +
+      '<div class="receita-right"><div class="receita-valor">'+f(x.valor)+'</div></div>' +
+    '</div>').join('');
+
+  const note = document.getElementById('df-note');
+  if (note) note.innerHTML = '💡 ' + d.nota;
+
+  if (_dfChart) _dfChart.destroy();
+  _dfChart = new Chart(document.getElementById('dfChart'), {
+    type: 'bar',
+    data: { labels: items.map(x=>x.nome),
+      datasets: [{ label:'Valor', data: items.map(x=>x.valor), backgroundColor:'#e05c5c', borderRadius:4, borderWidth:0 }] },
+    options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ' R$ ' + ctx.parsed.x.toLocaleString('pt-BR', {minimumFractionDigits:2}) } } },
+      scales:{ x:{ ticks:{ color:'#8b8f9a', font:{size:10}, callback:v=>'R$'+(v/1000).toFixed(1)+'k' }, grid:{color:'#2a2d3533'} },
+        y:{ ticks:{ color:'#8b8f9a', font:{size:10} }, grid:{display:false} } } }
   });
-  const sorted = Object.entries(groups).sort((a,b) =>
-    b[1].reduce((s,t)=>s+t.val,0) - a[1].reduce((s,t)=>s+t.val,0)
-  );
-
-  // Renderizar lista
-  const container = document.getElementById('varCats');
-  if (container && !container.dataset.init) {
-    container.dataset.init = '1';
-    sorted.forEach(([cat, items], i) => {
-      const total = items.reduce((s,t)=>s+t.val,0);
-      const id = 'vcat_' + i;
-      const c = catColors[cat] || { bg:'#F1EFE8', cor:'#888' };
-
-      const sec = document.createElement('div');
-
-      const hdr = document.createElement('div');
-      hdr.className = 'var-cat-header';
-      hdr.innerHTML = `
-        <div class="var-cat-title">
-          <span style="background:${c.bg};width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;">${items[0].emoji}</span>
-          ${cat}
-          <span style="font-size:11px;font-weight:400;color:var(--text3);">${items.length} lançamento${items.length>1?'s':''}</span>
-        </div>
-        <div class="var-cat-total">
-          R$ ${total.toFixed(2).replace('.',',')}
-          <span id="ico_${id}" style="font-size:11px;color:var(--text3);transition:transform 0.2s;">▼</span>
-        </div>`;
-
-      const body = document.createElement('div');
-      body.className = 'var-cat-body';
-      body.id = id;
-      body.style.background = 'var(--surface)';
-      body.style.border = '1px solid var(--border)';
-      body.style.borderRadius = '8px';
-      body.innerHTML = items.map(t => `
-        <div class="var-tx">
-          <span class="var-tx-date">${t.date}</span>
-          <span class="var-tx-desc">${t.desc} <span class="var-badge-pend">pendente</span></span>
-          <span class="var-tx-val">R$ ${t.val.toFixed(2).replace('.',',')}</span>
-        </div>`).join('');
-
-      hdr.addEventListener('click', () => {
-        const open = body.style.maxHeight && body.style.maxHeight !== '0px';
-        body.style.maxHeight = open ? '0' : body.scrollHeight + 'px';
-        document.getElementById('ico_' + id).style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
-      });
-
-      sec.appendChild(hdr);
-      sec.appendChild(body);
-      container.appendChild(sec);
-    });
-  }
-
-  // Donut
-  if (!window._varDonutInit) {
-    window._varDonutInit = true;
-    const catTotals = sorted.map(([cat, items]) => ({
-      cat, total: items.reduce((s,t)=>s+t.val,0),
-      cor: (catColors[cat]||{cor:'#888'}).cor
-    }));
-    new Chart(document.getElementById('varDonut'), {
-      type: 'doughnut',
-      data: {
-        labels: catTotals.map(c => c.cat),
-        datasets: [{ data: catTotals.map(c => c.total), backgroundColor: catTotals.map(c => c.cor), borderWidth: 0, hoverOffset: 6 }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false, cutout: '60%',
-        layout: { padding: 4 },
-        plugins: {
-          legend: { position: 'bottom', labels: { color: '#6b7280', font: { size: 10 }, boxWidth: 10, padding: 6, usePointStyle: true } },
-          tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.toLocaleString('pt-BR', {minimumFractionDigits:2}) } }
-        }
-      }
-    });
-
-    // Evolução mai → jun
-    new Chart(document.getElementById('varFlow'), {
-      type: 'bar',
-      data: {
-        labels: ['Mai (fatura paga)', 'Jun (aberta até agora)', 'Jun (projeção)'],
-        datasets: [{
-          label: 'Valor',
-          data: [5794.43, 1214.95, 11600],
-          backgroundColor: ['#16a34a88','#EF9F2788','#E24B4A44'],
-          borderColor: ['#16a34a','#EF9F27','#E24B4A'],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits:2}) } }
-        },
-        scales: {
-          x: { ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { color: '#e2e4ec44' } },
-          y: { ticks: { color: '#9ca3af', font: { size: 10 }, callback: v => 'R$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#e2e4ec44' } }
-        }
-      }
-    });
-  }
 }
+
+function renderDespesasVar(month) {
+  const d = despVarData[month] || despVarData['2026-05'];
+  const items = [...d.items].sort((a,b)=>b.valor-a.valor);
+  const total = items.reduce((s,x)=>s+x.valor,0);
+  const top = items[0];
+  const fixasTotal = (despFixasData[month]||despFixasData['2026-05']).items.reduce((s,x)=>s+x.valor,0);
+  const pctVar = (total+fixasTotal) ? Math.round(total/(total+fixasTotal)*100) : 0;
+  const mes = (monthNames[month] || month);
+  const mesCurto = mes.slice(0,3).toLowerCase() + '/' + month.slice(2,4);
+  const f = v => 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  const set = (id,v)=>{ const e=document.getElementById(id); if(e) e.textContent=v; };
+
+  set('dv-total', f(total));
+  set('dv-total-sub', mesCurto);
+  set('dv-count', items.length);
+  set('dv-top', f(top.valor));
+  set('dv-top-sub', top.nome);
+  set('dv-pct', pctVar + '%');
+  set('dv-header', f(total) + ' em ' + mesCurto);
+
+  document.getElementById('dv-list').innerHTML = items.map(x =>
+    '<div class="receita-item">' +
+      '<div class="receita-icon" style="background:var(--surface2);">'+x.emoji+'</div>' +
+      '<div class="receita-info"><div class="receita-nome">'+x.nome+'</div><div class="receita-sub">'+x.sub+'</div></div>' +
+      '<div class="receita-right"><div class="receita-valor">'+f(x.valor)+'</div></div>' +
+    '</div>').join('');
+
+  const note = document.getElementById('dv-note');
+  if (note) note.innerHTML = '⚠️ ' + d.nota;
+
+  if (_dvChart) _dvChart.destroy();
+  _dvChart = new Chart(document.getElementById('dvChart'), {
+    type: 'bar',
+    data: { labels: items.map(x=>x.nome),
+      datasets: [{ label:'Valor', data: items.map(x=>x.valor), backgroundColor:'#a78bfa', borderRadius:4, borderWidth:0 }] },
+    options: { indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ' R$ ' + ctx.parsed.x.toLocaleString('pt-BR', {minimumFractionDigits:2}) } } },
+      scales:{ x:{ ticks:{ color:'#8b8f9a', font:{size:10}, callback:v=>'R$'+(v/1000).toFixed(1)+'k' }, grid:{color:'#2a2d3533'} },
+        y:{ ticks:{ color:'#8b8f9a', font:{size:10} }, grid:{display:false} } } }
+  });
+}
+
+function initFixasPage()     { renderDespesasFixas(selectedMonths.fixas || '2026-05'); }
+function initVariaveisPage() { renderDespesasVar(selectedMonths.variaveis || '2026-05'); }
 
 function switchPage(page, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1611,6 +1495,9 @@ function switchPage(page, el) {
   }
   if (page === 'variaveis') {
     initVariaveisPage();
+  }
+  if (page === 'despesas-fixas') {
+    initFixasPage();
   }
   if (page === 'projecao') {
     initProjecaoPage();
@@ -1974,6 +1861,8 @@ function setMonthFilter(section, month, el) {
 
   if (section === 'visao') applyVisaoMonth(month);
   if (section === 'receitas') renderReceitas(month);
+  if (section === 'fixas') renderDespesasFixas(month);
+  if (section === 'variaveis') renderDespesasVar(month);
 
   const note = document.getElementById(section + '-month-note');
   const d = monthlyData[month];
