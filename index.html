@@ -1897,6 +1897,60 @@ const monthNames = {
 };
 const selectedMonths = { visao: '2026-05', receitas: '2026-05', fixas: '2026-05', variaveis: '2026-05' };
 
+// ─── DADOS REAIS POR MÊS (Open Finance · conta corrente Nubank) ───────────────
+const monthlyData = {
+  '2026-03': {
+    entradas: 21682.44, entradasN: 3, saidas: 15167.17, saidasN: 17,
+    investLiq: -1550.00, saldo: 6515.27,
+    topCat: 'Fatura cartão', topCatVal: 8293.17,
+    variaveis: 8293.17,
+    nota: 'Mês com honorários extras (R$ 21,7 mil em entradas, incluindo adiantamentos). Pix de R$ 4.064 para Nathalia.'
+  },
+  '2026-04': {
+    entradas: 8800.37, entradasN: 3, saidas: 12992.72, saidasN: 24,
+    investLiq: -850.00, saldo: -4192.35,
+    topCat: 'Fatura cartão', topCatVal: 8277.41,
+    variaveis: 8277.41,
+    nota: 'Saldo negativo no mês: saídas superaram entradas em R$ 4.192. Inclui financiamento Caixa (R$ 697) e cashback de R$ 767.'
+  },
+  '2026-05': {
+    entradas: 11849.85, entradasN: 4, saidas: 10582.00, saidasN: 17,
+    investLiq: 1130.00, saldo: 1267.85,
+    topCat: 'Fatura cartão', topCatVal: 5794.43,
+    variaveis: 5794.43,
+    nota: ''
+  },
+  '2026-06': {
+    entradas: 9352.02, entradasN: 5, saidas: 11695.87, saidasN: 16,
+    investLiq: 2363.53, saldo: -2343.85,
+    topCat: 'Transferências', topCatVal: 6225.68,
+    variaveis: 2700.00,
+    nota: 'Parcial (até 10/06). Inclui Pix de R$ 4.000 para Claudio e R$ 2.700 para clínica de estética. Resgate de R$ 4.163 cobriu parte das saídas.'
+  }
+};
+
+function fmtBR(v) {
+  return 'R$ ' + Math.abs(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function applyVisaoMonth(month) {
+  const d = monthlyData[month];
+  if (!d) return;
+  const set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+
+  set('dEntradas', fmtBR(d.entradas));
+  set('dEntradasSub', d.entradasN + ' lançamentos de entrada');
+  set('dDespesas', fmtBR(d.saidas));
+  set('dDespesasSub', d.saidasN + ' lançamentos de saída');
+  set('dTopCat', d.topCat);
+  set('dTopCatSub', fmtBR(d.topCatVal) + ' no mês');
+  set('dVariaveis', fmtBR(d.variaveis));
+
+  set('mInvest', (d.investLiq >= 0 ? '+' : '−') + fmtBR(d.investLiq));
+  set('mInvestSub', 'Resgates − aplicações');
+  set('mSaldo', (d.saldo >= 0 ? '+' : '−') + fmtBR(d.saldo));
+}
+
 function setMonthFilter(section, month, el) {
   selectedMonths[section] = month;
   const bar = el.closest('.month-filter-bar');
@@ -1905,15 +1959,19 @@ function setMonthFilter(section, month, el) {
   const badge = document.getElementById(section + '-month-badge');
   if (badge) badge.textContent = 'Exibindo: ' + (monthNames[month] || month);
 
+  if (section === 'visao') applyVisaoMonth(month);
+
   const note = document.getElementById(section + '-month-note');
-  const isCurrent = month === '2026-05';
+  const d = monthlyData[month];
   if (note) {
-    note.style.display = isCurrent ? 'none' : 'flex';
-    if (!isCurrent) note.textContent = '📅 Dados históricos de ' + (monthNames[month] || month) + ' — visão de referência. Novos extratos serão integrados conforme disponíveis.';
+    const hasNota = d && d.nota;
+    note.style.display = hasNota ? 'flex' : 'none';
+    if (hasNota) note.textContent = '📅 ' + (monthNames[month] || month) + ': ' + d.nota;
   }
 }
 
 init();
+applyVisaoMonth('2026-05');
 
 // Auto-refresh a cada 5min
 setInterval(() => {
