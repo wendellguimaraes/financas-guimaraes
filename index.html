@@ -459,7 +459,7 @@
     <div class="metric-destaque-icon" style="background:var(--green-dim);color:var(--green);">💰</div>
     <div class="metric-destaque-body">
       <div class="metric-destaque-label">Receita fixa mensal</div>
-      <div class="metric-destaque-value" style="color:var(--green);">R$ 9.163,65</div>
+      <div class="metric-destaque-value" id="dReceitaFixa" style="color:var(--green);">R$ 9.163,65</div>
       <div class="metric-destaque-sub">Pró-labore Francine + Wendell</div>
     </div>
   </div>
@@ -467,7 +467,7 @@
     <div class="metric-destaque-icon" style="background:var(--red-dim);color:var(--red);">📌</div>
     <div class="metric-destaque-body">
       <div class="metric-destaque-label">Despesas fixas mensais</div>
-      <div class="metric-destaque-value" style="color:var(--red);">R$ 8.908,71</div>
+      <div class="metric-destaque-value" id="dDespesaFixa" style="color:var(--red);">R$ 8.908,71</div>
       <div class="metric-destaque-sub">Boleto, Pix e recorrências cartão</div>
     </div>
   </div>
@@ -2100,13 +2100,40 @@ function applyVisaoMonth(month) {
   set('dEntradasSub', d.entradasN + ' lançamentos de entrada');
   set('dDespesas', fmtBR(d.saidas));
   set('dDespesasSub', d.saidasN + ' lançamentos de saída');
-  set('dTopCat', d.topCat);
-  set('dTopCatSub', fmtBR(d.topCatVal) + ' no mês');
-  set('dVariaveis', fmtBR(d.variaveis));
 
   set('mInvest', (d.investLiq >= 0 ? '+' : '−') + fmtBR(d.investLiq));
   set('mInvestSub', 'Resgates − aplicações');
   set('mSaldo', (d.saldo >= 0 ? '+' : '−') + fmtBR(d.saldo));
+
+  // Receitas fixas e variáveis (a partir dos dados reais por mês)
+  if (typeof receitasData !== 'undefined' && receitasData[month]) {
+    const rf = receitasData[month].fixas.reduce((s,x)=>s+x.valor,0);
+    set('dReceitaFixa', fmtBR(rf));
+  }
+
+  // Despesas fixas (a partir dos dados reais por mês)
+  let despFixa = 0;
+  if (typeof despFixasData !== 'undefined' && despFixasData[month]) {
+    despFixa = despFixasData[month].items.reduce((s,x)=>s+x.valor,0);
+    set('dDespesaFixa', fmtBR(despFixa));
+  }
+
+  // Despesas variáveis (a partir dos dados reais por mês)
+  let despVar = 0;
+  if (typeof despVarData !== 'undefined' && despVarData[month]) {
+    despVar = despVarData[month].items.reduce((s,x)=>s+x.valor,0);
+    set('dVariaveis', fmtBR(despVar));
+    set('dVariaveisSub', despVarData[month].items.length + ' lançamentos não recorrentes');
+  }
+
+  // Maior categoria de gastos: o maior entre fixas e o maior item variável
+  let topNome = d.topCat, topVal = d.topCatVal;
+  if (typeof despVarData !== 'undefined' && despVarData[month]) {
+    const maiorVar = [...despVarData[month].items].sort((a,b)=>b.valor-a.valor)[0];
+    if (maiorVar && maiorVar.valor > topVal) { topNome = maiorVar.nome; topVal = maiorVar.valor; }
+  }
+  set('dTopCat', topNome);
+  set('dTopCatSub', fmtBR(topVal) + ' no mês');
 }
 
 function setMonthFilter(section, month, el) {
