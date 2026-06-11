@@ -541,26 +541,26 @@
   </div>
   <div id="receitas-month-note" style="display:none;background:var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:12px;color:var(--gold);margin-bottom:16px;"></div>
 
-  <!-- MÉTRICAS -->
+  <!-- MÉTRICAS (dinâmicas) -->
   <div class="receitas-grid">
     <div class="receita-metric">
       <div class="receita-metric-label">Receitas fixas / mês</div>
-      <div class="receita-metric-value" style="color:var(--green);">R$ 9.163,65</div>
-      <div class="receita-metric-sub">2 fontes recorrentes</div>
+      <div class="receita-metric-value" id="rec-fixas-val" style="color:var(--green);">—</div>
+      <div class="receita-metric-sub" id="rec-fixas-sub">—</div>
     </div>
     <div class="receita-metric">
       <div class="receita-metric-label">Receitas variáveis / mês</div>
-      <div class="receita-metric-value" style="color:var(--gold);">R$ 24.680,85</div>
-      <div class="receita-metric-sub">Pix extra, resgates e eventuais</div>
+      <div class="receita-metric-value" id="rec-var-val" style="color:var(--gold);">—</div>
+      <div class="receita-metric-sub" id="rec-var-sub">—</div>
     </div>
     <div class="receita-metric">
       <div class="receita-metric-label">Total de receitas</div>
-      <div class="receita-metric-value" style="color:var(--blue);">R$ 33.844,50</div>
+      <div class="receita-metric-value" id="rec-total-val" style="color:var(--blue);">—</div>
       <div class="receita-metric-sub">Fixas + variáveis</div>
     </div>
     <div class="receita-metric">
       <div class="receita-metric-label">% que é fixo</div>
-      <div class="receita-metric-value">27%</div>
+      <div class="receita-metric-value" id="rec-pct-val">—</div>
       <div class="receita-metric-sub">Renda previsível</div>
     </div>
   </div>
@@ -580,114 +580,36 @@
   <!-- RECEITAS FIXAS -->
   <div class="receita-section-title">
     <span>🟢 Receitas fixas mensais</span>
-    <span style="color:var(--green);">R$ 9.163,65 / mês</span>
+    <span id="rec-fixas-header" style="color:var(--green);">—</span>
   </div>
-  <div class="receita-list">
-
-    <div class="receita-item">
-      <div class="receita-icon" style="background:var(--green-dim);">⚖️</div>
-      <div class="receita-info">
-        <div class="receita-nome">Pró-labore Francine <span class="receita-badge fixa">recorrente</span></div>
-        <div class="receita-sub">D'Artibale Faria Sociedade de Advogados · Honorários</div>
-      </div>
-      <div class="receita-right">
-        <div class="receita-valor">R$ 7.833,02</div>
-        <div class="receita-data">todo mês · 05/05 último recebimento</div>
-      </div>
-    </div>
-
-    <div class="receita-item">
-      <div class="receita-icon" style="background:var(--blue-dim);">👤</div>
-      <div class="receita-info">
-        <div class="receita-nome">Pró-labore Wendell <span class="receita-badge fixa">recorrente</span></div>
-        <div class="receita-sub">Wendell Junio Guimarães · Transferência Nubank</div>
-      </div>
-      <div class="receita-right">
-        <div class="receita-valor">R$ 1.330,63</div>
-        <div class="receita-data">todo mês · 18/05 último recebimento</div>
-      </div>
-    </div>
-
-  </div>
+  <div class="receita-list" id="rec-fixas-list"></div>
 
   <!-- RECEITAS VARIÁVEIS -->
   <div class="receita-section-title" style="margin-top:24px;">
     <span>🟡 Receitas variáveis</span>
-    <span style="color:var(--gold);">R$ 24.680,85 em mai/26</span>
+    <span id="rec-var-header" style="color:var(--gold);">—</span>
   </div>
-  <div class="receita-list">
-
-    <div class="receita-item">
-      <div class="receita-icon" style="background:var(--green-dim);">⚖️</div>
-      <div class="receita-info">
-        <div class="receita-nome">Pix extra — D'Artibale Faria <span class="receita-badge" style="background:var(--gold-dim);color:var(--gold);">eventual</span></div>
-        <div class="receita-sub">D'Artibale Faria Sociedade de Advogados · recebimento acima do pró-labore</div>
-      </div>
-      <div class="receita-right">
-        <div class="receita-valor">R$ 21.994,65</div>
-        <div class="receita-data">27/05</div>
-      </div>
-    </div>
-
-    <div class="receita-item">
-      <div class="receita-icon" style="background:var(--gold-dim);">📈</div>
-      <div class="receita-info">
-        <div class="receita-nome">Resgates RDB <span class="receita-badge" style="background:var(--gold-dim);color:var(--gold);">eventual</span></div>
-        <div class="receita-sub">Resgates de reserva · valor varia conforme necessidade</div>
-      </div>
-      <div class="receita-right">
-        <div class="receita-valor">R$ 1.630,00</div>
-        <div class="receita-data">4 resgates em maio</div>
-      </div>
-    </div>
-
-    <div class="receita-item">
-      <div class="receita-icon" style="background:var(--gold-dim);">💹</div>
-      <div class="receita-info">
-        <div class="receita-nome">Resgate Fundo Nu Reserva <span class="receita-badge" style="background:var(--gold-dim);color:var(--gold);">eventual</span></div>
-        <div class="receita-sub">Fundo Nu Reserva Imediata</div>
-      </div>
-      <div class="receita-right">
-        <div class="receita-valor">R$ 1.003,20</div>
-        <div class="receita-data">12/05</div>
-      </div>
-    </div>
-
-    <div class="receita-item">
-      <div class="receita-icon" style="background:var(--green-dim);">↙</div>
-      <div class="receita-info">
-        <div class="receita-nome">Pix recebido — Fernanda <span class="receita-badge" style="background:var(--gold-dim);color:var(--gold);">eventual</span></div>
-        <div class="receita-sub">Fernanda Pedrocchi Leal · Transferência</div>
-      </div>
-      <div class="receita-right">
-        <div class="receita-valor">R$ 53,00</div>
-        <div class="receita-data">23/05</div>
-      </div>
-    </div>
-
-  </div>
+  <div class="receita-list" id="rec-var-list"></div>
 
   <!-- COMPARATIVO BAR -->
   <div class="fixas-total-bar" style="margin-top:24px;">
     <div>
       <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Receitas fixas</div>
-      <div style="font-size:22px;font-weight:700;color:var(--green);">R$ 9.163,65</div>
-      <div style="font-size:11px;color:var(--text3);">27% do total</div>
+      <div style="font-size:22px;font-weight:700;color:var(--green);" id="rec-bar-fixas">—</div>
+      <div style="font-size:11px;color:var(--text3);" id="rec-bar-fixas-pct">—</div>
     </div>
     <div style="text-align:center;">
       <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Receitas variáveis</div>
-      <div style="font-size:22px;font-weight:700;color:var(--gold);">R$ 24.680,85</div>
-      <div style="font-size:11px;color:var(--text3);">73% do total</div>
+      <div style="font-size:22px;font-weight:700;color:var(--gold);" id="rec-bar-var">—</div>
+      <div style="font-size:11px;color:var(--text3);" id="rec-bar-var-pct">—</div>
     </div>
     <div style="text-align:right;border-left:1px solid var(--border);padding-left:16px;">
-      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">Total recebido (mai)</div>
-      <div style="font-size:22px;font-weight:700;color:var(--blue);">R$ 33.844,50</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;" id="rec-bar-total-label">Total recebido</div>
+      <div style="font-size:22px;font-weight:700;color:var(--blue);" id="rec-bar-total">—</div>
     </div>
   </div>
 
-  <div style="background:var(--blue-dim);border-left:3px solid var(--blue);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:13px;color:var(--blue);margin-top:12px;margin-bottom:20px;">
-    💡 <strong>Saúde da renda:</strong> em maio, 73% da receita veio de fontes variáveis — puxada pelo Pix extra de R$ 21.994 da D'Artibale. Esse foi um recebimento pontual acima do pró-labore; em meses normais a renda fixa (R$ 9.163) é a base. Vale separar parte desses extras para a reserva e metas de longo prazo.
-  </div>
+  <div id="rec-insight" style="background:var(--blue-dim);border-left:3px solid var(--blue);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:13px;color:var(--blue);margin-top:12px;margin-bottom:20px;"></div>
 
 </div><!-- fim page receitas -->
 
@@ -1342,43 +1264,122 @@ const historico = {
 
 
 // ─── GRÁFICOS RECEITAS ───────────────────────────────────────────────────────
-function initReceitaCharts() {
-  // Donut: fixas vs variáveis
-  new Chart(document.getElementById('receitaCompDonut'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Receitas fixas', 'Receitas variáveis'],
-      datasets: [{ data: [9163.65, 24680.85], backgroundColor: ['#4dbb8a','#e8c468'], borderWidth: 0, hoverOffset: 6 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false, cutout: '65%',
-      plugins: {
-        legend: { position: 'right', labels: { color: '#8b8f9a', font: { size: 11 }, boxWidth: 10, padding: 10 } },
-        tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.toLocaleString('pt-BR', {minimumFractionDigits:2}) } }
-      }
-    }
-  });
+// ─── DADOS DE RECEITAS POR MÊS (Open Finance · classificação manual) ──────────
+const receitasData = {
+  '2026-03': {
+    fixas: [
+      { icon:'⚖️', bg:'var(--green-dim)', nome:'Pró-labore Francine', sub:"D'Artibale Faria · honorários", valor:7833.02, data:'05/03' }
+    ],
+    variaveis: [
+      { icon:'⚖️', bg:'var(--green-dim)', nome:"Pix extra — D'Artibale", sub:'Recebimento acima do pró-labore', valor:7849.42, data:'24/03' },
+      { icon:'⚖️', bg:'var(--green-dim)', nome:"Pix extra — D'Artibale", sub:'Recebimento acima do pró-labore', valor:6000.00, data:'17/03' }
+    ],
+    insight: "Março teve dois recebimentos extras da D'Artibale (R$ 7.849 + R$ 6.000) além do pró-labore — receita variável alta. Bom mês para reforçar a reserva."
+  },
+  '2026-04': {
+    fixas: [
+      { icon:'⚖️', bg:'var(--green-dim)', nome:'Pró-labore Francine', sub:"D'Artibale Faria · honorários", valor:7833.02, data:'07/04' }
+    ],
+    variaveis: [
+      { icon:'💰', bg:'var(--gold-dim)', nome:'Resgate de cashback', sub:'Nubank · cashback acumulado', valor:767.35, data:'14/04' },
+      { icon:'👤', bg:'var(--blue-dim)', nome:'Pix recebido — Wendell', sub:'Transferência avulsa', valor:200.00, data:'27/04' }
+    ],
+    insight: 'Abril foi um mês de receita baixa — só o pró-labore fixo e pequenas entradas. As despesas superaram as receitas neste mês.'
+  },
+  '2026-05': {
+    fixas: [
+      { icon:'⚖️', bg:'var(--green-dim)', nome:'Pró-labore Francine', sub:"D'Artibale Faria · honorários", valor:7833.02, data:'05/05' },
+      { icon:'👤', bg:'var(--blue-dim)', nome:'Pró-labore Wendell · parte 1', sub:'Transferência Nubank', valor:1330.63, data:'18/05' }
+    ],
+    variaveis: [
+      { icon:'⚖️', bg:'var(--green-dim)', nome:"Pix extra — D'Artibale", sub:'Recebimento acima do pró-labore', valor:21994.65, data:'27/05' },
+      { icon:'↙', bg:'var(--green-dim)', nome:'Pix recebido — Fernanda', sub:'Fernanda Pedrocchi Leal', valor:53.00, data:'23/05' }
+    ],
+    insight: "Maio teve um Pix extra de R$ 21.994 da D'Artibale — recebimento pontual que dominou a receita variável. Vale separar parte para reserva e metas."
+  },
+  '2026-06': {
+    fixas: [
+      { icon:'⚖️', bg:'var(--green-dim)', nome:'Pró-labore Francine', sub:"D'Artibale Faria · honorários", valor:7833.02, data:'05/06' },
+      { icon:'👤', bg:'var(--blue-dim)', nome:'Pró-labore Wendell · parte 2', sub:'Transferência Nubank', valor:1250.00, data:'03/06' }
+    ],
+    variaveis: [
+      { icon:'👤', bg:'var(--blue-dim)', nome:'Pix recebido — Wendell', sub:'Transferência avulsa', valor:228.00, data:'07/06' },
+      { icon:'👤', bg:'var(--blue-dim)', nome:'Pix recebido — Wendell', sub:'Transferência avulsa', valor:41.00, data:'08/06' }
+    ],
+    insight: 'Junho (parcial até 10/06): receita ainda concentrada no pró-labore fixo. Mês previsível até agora, sem grandes entradas variáveis.'
+  }
+};
 
-  // Barra: comparativo por fonte
-  new Chart(document.getElementById('receitaCompBar'), {
-    type: 'bar',
-    data: {
-      labels: ['Pix extra\nD\u0027Artibale', 'Pró-labore\nFrancine', 'Pró-labore\nWendell', 'Resgates\nRDB', 'Fundo Nu', 'Pix\nFernanda'],
-      datasets: [
-        { label: 'Valor', data: [21994.65, 7833.02, 1330.63, 1630.00, 1003.20, 53.00],
-          backgroundColor: ['#e8c468','#4dbb8a','#4dbb8a','#e8c468','#e8c468','#e8c468'],
-          borderWidth: 0 }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits:2}) } } },
-      scales: {
-        x: { ticks: { color: '#8b8f9a', font: { size: 10 } }, grid: { color: '#2a2d3533' } },
-        y: { ticks: { color: '#8b8f9a', font: { size: 10 }, callback: v => 'R$' + (v/1000).toFixed(1) + 'k' }, grid: { color: '#2a2d3533' } }
-      }
-    }
+let _recDonut = null, _recBar = null;
+
+function renderReceitas(month) {
+  const d = receitasData[month] || receitasData['2026-05'];
+  const totFixas = d.fixas.reduce((s,x)=>s+x.valor,0);
+  const totVar   = d.variaveis.reduce((s,x)=>s+x.valor,0);
+  const total    = totFixas + totVar;
+  const pctFixas = total ? Math.round(totFixas/total*100) : 0;
+  const pctVar   = 100 - pctFixas;
+  const mes = (monthNames[month] || month);
+  const mesCurto = mes.slice(0,3).toLowerCase() + '/' + month.slice(2,4);
+  const f = v => 'R$ ' + v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  const set = (id,v)=>{ const e=document.getElementById(id); if(e) e.textContent=v; };
+
+  set('rec-fixas-val', f(totFixas));
+  set('rec-fixas-sub', d.fixas.length + (d.fixas.length===1?' fonte recorrente':' fontes recorrentes'));
+  set('rec-var-val', f(totVar));
+  set('rec-var-sub', d.variaveis.length + (d.variaveis.length===1?' entrada eventual':' entradas eventuais'));
+  set('rec-total-val', f(total));
+  set('rec-pct-val', pctFixas + '%');
+  set('rec-fixas-header', f(totFixas) + ' / mês');
+  set('rec-var-header', f(totVar) + ' em ' + mesCurto);
+
+  const item = (x,fixa) => '<div class="receita-item">' +
+      '<div class="receita-icon" style="background:'+x.bg+';">'+x.icon+'</div>' +
+      '<div class="receita-info">' +
+        '<div class="receita-nome">'+x.nome+' <span class="receita-badge" style="background:var(--gold-dim);color:var(--gold);">'+(fixa?'recorrente':'eventual')+'</span></div>' +
+        '<div class="receita-sub">'+x.sub+'</div>' +
+      '</div>' +
+      '<div class="receita-right">' +
+        '<div class="receita-valor">'+f(x.valor)+'</div>' +
+        '<div class="receita-data">'+x.data+'</div>' +
+      '</div>' +
+    '</div>';
+  document.getElementById('rec-fixas-list').innerHTML = d.fixas.map(x=>item(x,true)).join('') || '<div class="loading">Sem receitas fixas neste mês.</div>';
+  document.getElementById('rec-var-list').innerHTML = d.variaveis.map(x=>item(x,false)).join('') || '<div class="loading">Sem receitas variáveis neste mês.</div>';
+
+  set('rec-bar-fixas', f(totFixas));
+  set('rec-bar-fixas-pct', pctFixas + '% do total');
+  set('rec-bar-var', f(totVar));
+  set('rec-bar-var-pct', pctVar + '% do total');
+  set('rec-bar-total-label', 'Total recebido (' + mesCurto + ')');
+  set('rec-bar-total', f(total));
+  const ins = document.getElementById('rec-insight');
+  if (ins) ins.innerHTML = '💡 <strong>Saúde da renda:</strong> ' + d.insight;
+
+  const allSrc = [...d.fixas.map(x=>({nome:x.nome,valor:x.valor,cor:'#4dbb8a'})), ...d.variaveis.map(x=>({nome:x.nome,valor:x.valor,cor:'#e8c468'}))].sort((a,b)=>b.valor-a.valor);
+  if (_recDonut) _recDonut.destroy();
+  _recDonut = new Chart(document.getElementById('receitaCompDonut'), {
+    type: 'doughnut',
+    data: { labels: ['Receitas fixas', 'Receitas variáveis'],
+      datasets: [{ data: [totFixas, totVar], backgroundColor: ['#4dbb8a','#e8c468'], borderWidth: 0, hoverOffset: 6 }] },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '65%',
+      plugins: { legend: { position: 'right', labels: { color: '#8b8f9a', font: { size: 11 }, boxWidth: 10, padding: 10 } },
+        tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.toLocaleString('pt-BR', {minimumFractionDigits:2}) } } } }
   });
+  if (_recBar) _recBar.destroy();
+  _recBar = new Chart(document.getElementById('receitaCompBar'), {
+    type: 'bar',
+    data: { labels: allSrc.map(x=>x.nome.replace(' — ','\n').replace(' · ','\n')),
+      datasets: [{ label: 'Valor', data: allSrc.map(x=>x.valor), backgroundColor: allSrc.map(x=>x.cor), borderWidth: 0 }] },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' R$ ' + ctx.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits:2}) } } },
+      scales: { x: { ticks: { color: '#8b8f9a', font: { size: 9 } }, grid: { color: '#2a2d3533' } },
+        y: { ticks: { color: '#8b8f9a', font: { size: 10 }, callback: v => 'R$' + (v/1000).toFixed(1) + 'k' }, grid: { color: '#2a2d3533' } } } }
+  });
+}
+
+function initReceitaCharts() {
+  renderReceitas(selectedMonths.receitas || '2026-05');
 }
 
 // Inicializa gráficos de receita quando a aba for clicada
@@ -1972,6 +1973,7 @@ function setMonthFilter(section, month, el) {
   if (badge) badge.textContent = 'Exibindo: ' + (monthNames[month] || month);
 
   if (section === 'visao') applyVisaoMonth(month);
+  if (section === 'receitas') renderReceitas(month);
 
   const note = document.getElementById(section + '-month-note');
   const d = monthlyData[month];
